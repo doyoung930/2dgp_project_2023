@@ -19,6 +19,8 @@
 적 몬스터를 처치하게 되면 아이템이 출현 합니다.
 
 목숨은 4개입니다.
+![image](https://github.com/doyoung930/2dgp_project_2023/assets/70666642/a7844e50-a6a6-4979-bd88-ee5df5d0801f)
+![image](https://github.com/doyoung930/2dgp_project_2023/assets/70666642/cb5d896a-91b0-46a1-883d-d0fd50ff84b5)
 
 일정
 1주차 게임의 기본 캐릭터 삽입 과 키보드입 출력
