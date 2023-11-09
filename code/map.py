@@ -1,14 +1,14 @@
 from pico2d import *
 
-class play_map:
+
+class DungeonMap:
     def __init__(self):
-        self.image = load_image('grass.png')
+        #self.image = load_image("./map/dungeon/png/dungeon.png")
+        self.image = load_image("dungeon.png")
 
     def update(self):
         pass
 
     def draw(self):
         self.image.draw(400, 30)
-        self.image.draw(1200, 30)
-
-
+        # self.image.draw(1200, 30)

@@ -6,6 +6,7 @@ from pico2d import get_time, load_image, load_font, clamp, SDL_KEYDOWN, SDL_KEYU
 import game_world
 import game_framework
 
+
 # state event check
 # ( state event type, event value )
 
@@ -24,15 +25,16 @@ def left_down(e):
 def left_up(e):
     return e[0] == 'INPUT' and e[1].type == SDL_KEYUP and e[1].key == SDLK_LEFT
 
+
 def space_down(e):
     return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_SPACE
+
 
 def time_out(e):
     return e[0] == 'TIME_OUT'
 
+
 # time_out = lambda e : e[0] == 'TIME_OUT'
-
-
 
 
 # Boy Run Speed
@@ -48,105 +50,92 @@ ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
 FRAMES_PER_ACTION = 8
 
 
-
-
-
-
-
-
-
-
-
 class Idle:
 
     @staticmethod
-    def enter(boy, e):
-        if boy.face_dir == -1:
-            boy.action = 2
-        elif boy.face_dir == 1:
-            boy.action = 3
-        boy.dir = 0
-        boy.frame = 0
-        boy.wait_time = get_time() # pico2d import 필요
+    def enter(playercharacter, e):
+        if playercharacter.face_dir == -1:
+            playercharacter.action = 2
+        elif playercharacter.face_dir == 1:
+            playercharacter.action = 3
+        playercharacter.dir = 0
+        playercharacter.frame = 0
+        playercharacter.wait_time = get_time()  # pico2d import 필요
         pass
 
     @staticmethod
-    def exit(boy, e):
+    def exit(playercharacter, e):
         if space_down(e):
-            boy.fire_ball()
+            playercharacter.fire_ball()
         pass
 
     @staticmethod
-    def do(boy):
-        boy.frame = (boy.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 8
-        if get_time() - boy.wait_time > 2:
-            boy.state_machine.handle_event(('TIME_OUT', 0))
+    def do(playercharacter):
+        playercharacter.frame = (playercharacter.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 8
+        if get_time() - playercharacter.wait_time > 2:
+            playercharacter.state_machine.handle_event(('TIME_OUT', 0))
 
     @staticmethod
-    def draw(boy):
-        boy.image.clip_draw(int(boy.frame) * 100, boy.action * 100, 100, 100, boy.x, boy.y)
-
+    def draw(playercharacter):
+        playercharacter.image.clip_draw(int(playercharacter.frame) * 100, playercharacter.action * 100, 100, 100, playercharacter.x, playercharacter.y)
 
 
 class Run:
 
     @staticmethod
-    def enter(boy, e):
-        if right_down(e) or left_up(e): # 오른쪽으로 RUN
-            boy.dir, boy.action, boy.face_dir = 1, 1, 1
-        elif left_down(e) or right_up(e): # 왼쪽으로 RUN
-            boy.dir, boy.action, boy.face_dir = -1, 0, -1
+    def enter(playercharacter, e):
+        if right_down(e) or left_up(e):  # 오른쪽으로 RUN
+            playercharacter.dir, playercharacter.action, playercharacter.face_dir = 1, 1, 1
+        elif left_down(e) or right_up(e):  # 왼쪽으로 RUN
+            playercharacter.dir, playercharacter.action, playercharacter.face_dir = -1, 0, -1
 
     @staticmethod
-    def exit(boy, e):
+    def exit(playercharacter, e):
         if space_down(e):
-            boy.fire_ball()
+            playercharacter.fire_ball()
 
         pass
 
     @staticmethod
-    def do(boy):
-        # boy.frame = (boy.frame + 1) % 8
-        boy.x += boy.dir * RUN_SPEED_PPS * game_framework.frame_time
-        boy.x = clamp(25, boy.x, 1600-25)
-        boy.frame = (boy.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 8
-
+    def do(playercharacter):
+        # playercharacter.frame = (playercharacter.frame + 1) % 8
+        playercharacter.x += playercharacter.dir * RUN_SPEED_PPS * game_framework.frame_time
+        playercharacter.x = clamp(25, playercharacter.x, 1600 - 25)
+        playercharacter.frame = (playercharacter.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 8
 
     @staticmethod
-    def draw(boy):
-        boy.image.clip_draw(int(boy.frame) * 100, boy.action * 100, 100, 100, boy.x, boy.y)
-
+    def draw(playercharacter):
+        playercharacter.image.clip_draw(int(playercharacter.frame) * 100, playercharacter.action * 100, 100, 100, playercharacter.x, playercharacter.y)
 
 
 class Sleep:
 
     @staticmethod
-    def enter(boy, e):
-        boy.frame = 0
+    def enter(playercharacter, e):
+        playercharacter.frame = 0
         pass
 
     @staticmethod
-    def exit(boy, e):
+    def exit(playercharacter, e):
         pass
 
     @staticmethod
-    def do(boy):
-        boy.frame = (boy.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 8
-
+    def do(playercharacter):
+        playercharacter.frame = (playercharacter.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 8
 
     @staticmethod
-    def draw(boy):
-        if boy.face_dir == -1:
-            boy.image.clip_composite_draw(int(boy.frame) * 100, 200, 100, 100,
-                                          -3.141592 / 2, '', boy.x + 25, boy.y - 25, 100, 100)
+    def draw(playercharacter):
+        if playercharacter.face_dir == -1:
+            playercharacter.image.clip_composite_draw(int(playercharacter.frame) * 100, 200, 100, 100,
+                                          -3.141592 / 2, '', playercharacter.x + 25, playercharacter.y - 25, 100, 100)
         else:
-            boy.image.clip_composite_draw(int(boy.frame) * 100, 300, 100, 100,
-                                          3.141592 / 2, '', boy.x - 25, boy.y - 25, 100, 100)
+            playercharacter.image.clip_composite_draw(int(playercharacter.frame) * 100, 300, 100, 100,
+                                          3.141592 / 2, '', playercharacter.x - 25, playercharacter.y - 25, 100, 100)
 
 
 class StateMachine:
-    def __init__(self, boy):
-        self.boy = boy
+    def __init__(self, playercharacter):
+        self.playercharacter = playercharacter
         self.cur_state = Idle
         self.transitions = {
             Idle: {right_down: Run, left_down: Run, left_up: Run, right_up: Run, time_out: Sleep, space_down: Idle},
@@ -155,48 +144,44 @@ class StateMachine:
         }
 
     def start(self):
-        self.cur_state.enter(self.boy, ('NONE', 0))
+        self.cur_state.enter(self.playercharacter, ('NONE', 0))
 
     def update(self):
-        self.cur_state.do(self.boy)
+        self.cur_state.do(self.playercharacter)
 
     def handle_event(self, e):
         for check_event, next_state in self.transitions[self.cur_state].items():
             if check_event(e):
-                self.cur_state.exit(self.boy, e)
+                self.cur_state.exit(self.playercharacter, e)
                 self.cur_state = next_state
-                self.cur_state.enter(self.boy, e)
+                self.cur_state.enter(self.playercharacter, e)
                 return True
 
         return False
 
     def draw(self):
-        self.cur_state.draw(self.boy)
+        self.cur_state.draw(self.playercharacter)
 
 
-
-
-
-class Boy:
+class PlayerCharacter:
     def __init__(self):
         self.x, self.y = 50, 90
         self.frame = 0
         self.action = 3
         self.face_dir = 1
         self.dir = 0
-        self.image = load_image('animation_sheet.png')
+        self.image = load_image('./png/character/ch1/Walk/skeletonWalk1.png')
         self.font = load_font('ENCR10B.TTF', 16)
         self.state_machine = StateMachine(self)
         self.state_machine.start()
         self.ball_count = 10
 
-
-    def fire_ball(self):
-        if self.ball_count > 0:
-            self.ball_count -= 1
-            ball = Ball(self.x, self.y, self.face_dir*10)
-            game_world.add_object(ball)
-            game_world.add_collision_pair('zombie:ball', None, ball)
+    # def fire_ball(self):
+    #     if self.ball_count > 0:
+    #         self.ball_count -= 1
+    #         ball = Ball(self.x, self.y, self.face_dir*10)
+    #         game_world.add_object(ball)
+    #         game_world.add_collision_pair('zombie:ball', None, ball)
 
     def update(self):
         self.state_machine.update()
@@ -206,6 +191,6 @@ class Boy:
 
     def draw(self):
         self.state_machine.draw()
-        self.font.draw(self.x-10, self.y + 50, f'{self.ball_count:02d}', (255, 255, 0))
+        #self.font.draw(self.x - 10, self.y + 50, f'{self.ball_count:02d}', (255, 255, 0))
 
     # fill here

@@ -4,12 +4,12 @@ from pico2d import *
 import game_framework
 
 import game_world
-from grass import Grass
-from boy import Boy
-from ball import Ball
-from zombie import Zombie
+from map import DungeonMap
+from character import PlayerCharacter
+#from ball import Ball
+#from zombie import Zombie
 
-# boy = None
+playercharacter = None
 
 def handle_events():
     events = get_events()
@@ -19,19 +19,19 @@ def handle_events():
         elif event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
             game_framework.quit()
         else:
-            boy.handle_event(event)
+            playercharacter.handle_event(event)
 
 def init():
-    global grass
-    global boy
+    global dungeon_map
+    global playercharacter
 
     running = True
 
-    grass = Grass()
-    game_world.add_object(grass, 0)
+    dungeon_map = DungeonMap()
+    game_world.add_object(dungeon_map, 0)
 
-    boy = Boy()
-    game_world.add_object(boy, 1)
+    playercharacter = PlayerCharacter()
+    game_world.add_object(playercharacter, 1)
 
     # fill here
 
