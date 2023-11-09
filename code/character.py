@@ -77,8 +77,7 @@ class Idle:
 
     @staticmethod
     def draw(playercharacter):
-        playercharacter.image.clip_draw(int(playercharacter.frame) * 100, playercharacter.action * 100, 100, 100, playercharacter.x, playercharacter.y)
-
+        playercharacter.image.composite_draw(0, ' ', playercharacter.x, playercharacter.y, 200, 200)
 
 class Run:
 
@@ -105,9 +104,7 @@ class Run:
 
     @staticmethod
     def draw(playercharacter):
-        playercharacter.image.clip_draw(int(playercharacter.frame) * 100, playercharacter.action * 100, 100, 100, playercharacter.x, playercharacter.y)
-
-
+        playercharacter.image.composite_draw(0, ' ', playercharacter.x, playercharacter.y, 200, 200)
 class Sleep:
 
     @staticmethod
@@ -126,11 +123,9 @@ class Sleep:
     @staticmethod
     def draw(playercharacter):
         if playercharacter.face_dir == -1:
-            playercharacter.image.clip_composite_draw(int(playercharacter.frame) * 100, 200, 100, 100,
-                                          -3.141592 / 2, '', playercharacter.x + 25, playercharacter.y - 25, 100, 100)
+            playercharacter.image.composite_draw(0, 'h', playercharacter.x, playercharacter.y, 200, 200)
         else:
-            playercharacter.image.clip_composite_draw(int(playercharacter.frame) * 100, 300, 100, 100,
-                                          3.141592 / 2, '', playercharacter.x - 25, playercharacter.y - 25, 100, 100)
+            playercharacter.image.composite_draw(0, ' ', playercharacter.x, playercharacter.y, 200, 200)
 
 
 class StateMachine:
@@ -171,6 +166,9 @@ class PlayerCharacter:
         self.face_dir = 1
         self.dir = 0
         self.image = load_image('./png/character/ch1/Walk/skeletonWalk1.png')
+        self.sleep_image = load_image('./png/character/ch1/Walk/skeletonWalk1.png')
+        self.walk_image = load_image('./png/character/ch1/Walk/skeletonWalk1.png')
+        self.attack_image = load_image('./png/character/ch1/Walk/skeletonWalk1.png')
         self.font = load_font('ENCR10B.TTF', 16)
         self.state_machine = StateMachine(self)
         self.state_machine.start()
