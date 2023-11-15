@@ -1,10 +1,12 @@
 # 이것은 각 상태들을 객체로 구현한 것임.
 
-from pico2d import get_time, load_image, load_font, clamp, SDLK_UP, SDLK_DOWN, SDL_KEYDOWN, SDL_KEYUP, SDLK_SPACE, SDLK_LEFT, SDLK_RIGHT,  \
+from pico2d import get_time, load_image, load_font, clamp, SDLK_UP, SDLK_DOWN, SDL_KEYDOWN, SDL_KEYUP, SDLK_SPACE, \
+    SDLK_LEFT, SDLK_RIGHT, \
     draw_rectangle
 
 import game_world
 import game_framework
+from map import DungeonMap
 
 
 # state event check
@@ -21,23 +23,25 @@ def right_up(e):
 def left_down(e):
     return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_LEFT
 
+
 def left_up(e):
     return e[0] == 'INPUT' and e[1].type == SDL_KEYUP and e[1].key == SDLK_LEFT
+
+
 def up_up(e):
-    print('up')
     return e[0] == 'INPUT' and e[1].type == SDL_KEYUP and e[1].key == SDLK_UP
 
+
 def up_down(e):
-    print('up')
     return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_UP
 
 
 def down_up(e):
     return e[0] == 'INPUT' and e[1].type == SDL_KEYUP and e[1].key == SDLK_DOWN
 
+
 def down_down(e):
     return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_DOWN
-
 
 
 def space_down(e):
@@ -68,15 +72,16 @@ class Idle:
 
     @staticmethod
     def enter(playercharacter, e):
-        if playercharacter.face_dir == -1:#left
+        if playercharacter.face_dir == -1:  # left
             playercharacter.action = 2
-        elif playercharacter.face_dir == 1:#right
+        elif playercharacter.face_dir == 1:  # right
             playercharacter.action = 3
-        elif playercharacter.face_dir == 2: #up
+        elif playercharacter.face_dir == 2:  # up
             playercharacter.action = 3
-        elif playercharacter.face_dir == -2:    #down
+        elif playercharacter.face_dir == -2:  # down
             playercharacter.action = 3
         playercharacter.dir = 0
+        playercharacter.dir2 = 0
         playercharacter.frame = 0
         playercharacter.wait_time = get_time()  # pico2d import 필요
         pass
@@ -89,13 +94,15 @@ class Idle:
 
     @staticmethod
     def do(playercharacter):
-        playercharacter.frame = (playercharacter.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 8
+        playercharacter.frame = (playercharacter.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 3
         if get_time() - playercharacter.wait_time > 2:
             playercharacter.state_machine.handle_event(('TIME_OUT', 0))
 
     @staticmethod
     def draw(playercharacter):
-        playercharacter.image.composite_draw(0, ' ', playercharacter.x, playercharacter.y, 50, 50)
+        playercharacter.images['Idle'][int(playercharacter.frame)].composite_draw(0, ' ', playercharacter.x,
+                                                                                  playercharacter.y, 50, 50)
+
 
 class Run:
 
@@ -106,9 +113,10 @@ class Run:
         elif left_down(e) or right_up(e):  # 왼쪽으로 RUN
             playercharacter.dir, playercharacter.action, playercharacter.face_dir = -1, 0, -1
         elif up_up(e) or down_down(e):
-            playercharacter.dir, playercharacter.action, playercharacter.face_dir = 1, 0, -2
+            playercharacter.dir2, playercharacter.action, playercharacter.face_dir = 1, 0, -2
         elif up_down or down_up(e):
-            playercharacter.dir, playercharacter.action, playercharacter.face_dir = -1, 0, 2
+            playercharacter.dir2, playercharacter.action, playercharacter.face_dir = -1, 0, 2
+
     @staticmethod
     def exit(playercharacter, e):
         if space_down(e):
@@ -120,21 +128,41 @@ class Run:
     def do(playercharacter):
         # playercharacter.frame = (playercharacter.frame + 1) % 8
         if playercharacter.face_dir == -1 or playercharacter.face_dir == 1:
-            playercharacter.x += playercharacter.dir * RUN_SPEED_PPS * game_framework.frame_time
+            # playercharacter.x += playercharacter.dir * RUN_SPEED_PPS * game_framework.frame_time
             playercharacter.x = clamp(25, playercharacter.x, 1600 - 25)
-        elif  playercharacter.face_dir == -2 or playercharacter.face_dir == 2:
-            print("2 or -2 ")
-            playercharacter.y -= playercharacter.dir * RUN_SPEED_PPS * game_framework.frame_time
+        elif playercharacter.face_dir == -2 or playercharacter.face_dir == 2:
+            # playercharacter.y -= playercharacter.dir2 * RUN_SPEED_PPS * game_framework.frame_time
             playercharacter.y = clamp(25, playercharacter.y, 1600 - 25)
 
-        playercharacter.frame = (playercharacter.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 8
+        playercharacter.frame = (
+                                            playercharacter.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 5
 
     @staticmethod
     def draw(playercharacter):
+        # DungeonMap 그리기
+        dungeon_map.draw()
         if playercharacter.face_dir == -1:
-            playercharacter.image.composite_draw(0, 'h', playercharacter.x, playercharacter.y, 50, 50)
+            playercharacter.images['Walk'][int(playercharacter.frame)].composite_draw(0, 'h', playercharacter.x - 10,
+                                                                                      playercharacter.y, 55, 55)
         else:
-            playercharacter.image.composite_draw(0, ' ', playercharacter.x, playercharacter.y, 50, 50)
+            playercharacter.images['Walk'][int(playercharacter.frame)].composite_draw(0, ' ', playercharacter.x,
+                                                                                      playercharacter.y, 55, 55)
+class Attack:
+    def enter(playercharacter, e):
+        pass
+
+    def exit(playercharacter, e):
+        pass
+
+    @staticmethod
+    def do(playercharacter):
+        pass
+
+    @staticmethod
+    def draw(playercharacter):
+        pass
+
+
 class Sleep:
 
     @staticmethod
@@ -148,14 +176,19 @@ class Sleep:
 
     @staticmethod
     def do(playercharacter):
-        playercharacter.frame = (playercharacter.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 8
+        playercharacter.frame = (
+                                            playercharacter.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 5
 
     @staticmethod
     def draw(playercharacter):
+        # DungeonMap 그리기
+        dungeon_map.draw()
         if playercharacter.face_dir == -1:
-            playercharacter.image.composite_draw(0, 'h', playercharacter.x, playercharacter.y, 50, 50)
+            playercharacter.images['Idle'][int(playercharacter.frame)].composite_draw(0, 'h', playercharacter.x,
+                                                                                      playercharacter.y, 50, 50)
         else:
-            playercharacter.image.composite_draw(0, ' ', playercharacter.x, playercharacter.y, 50, 50)
+            playercharacter.images['Idle'][int(playercharacter.frame)].composite_draw(0, ' ', playercharacter.x,
+                                                                                      playercharacter.y, 50, 50)
 
 
 class StateMachine:
@@ -163,9 +196,12 @@ class StateMachine:
         self.playercharacter = playercharacter
         self.cur_state = Idle
         self.transitions = {
-            Idle: {right_down: Run, left_down: Run, left_up: Run, right_up: Run, up_down: Run, down_down: Run, up_up: Run, down_up: Run, time_out: Sleep, space_down: Idle},
-            Run: {right_down: Idle, left_down: Idle, right_up: Idle, left_up: Idle, up_down: Idle, down_down: Idle, up_up: Idle, down_up: Idle, space_down: Run},
-            Sleep: {right_down: Run, left_down: Run, right_up: Run, left_up: Run, up_down: Run, down_down: Run, up_up: Run, down_up: Run}
+            Idle: {right_down: Run, left_down: Run, left_up: Run, right_up: Run, up_down: Run, down_down: Run,
+                   up_up: Run, down_up: Run, time_out: Sleep, space_down: Idle},
+            Run: {right_down: Idle, left_down: Idle, right_up: Idle, left_up: Idle, up_down: Idle, down_down: Idle,
+                  up_up: Idle, down_up: Idle, space_down: Run},
+            Sleep: {right_down: Run, left_down: Run, right_up: Run, left_up: Run, up_down: Run, down_down: Run,
+                    up_up: Run, down_up: Run}
         }
 
     def start(self):
@@ -185,32 +221,43 @@ class StateMachine:
         return False
 
     def draw(self):
+        # DungeonMap 그리기
+        dungeon_map.draw()
         self.cur_state.draw(self.playercharacter)
 
-animation_names = ['Walk']
+
+animation_names = ['Walk', 'Idle']
+animation_names2 = ['Idle']
+
+
 class PlayerCharacter:
     images = None
+
     def load_images(self):
         if PlayerCharacter.images == None:
             PlayerCharacter.images = {}
             for name in animation_names:
-                PlayerCharacter.images[name] = [load_image("./png/character/ch1/walk/" + "Walk" + " _%d" % i + ".png") for i in range(0, 5)]
+                PlayerCharacter.images[name] = [load_image("./png/character/ch1/walk/" + name + "_%d" % i + ".png") for
+                                                i in range(0, 5)]
 
     def __init__(self):
-        self.x, self.y = 50, 90
-        self.frame = 0
-        self.action = 3     # 2 left 3 right
-        self.face_dir = 1
-        self.dir = 0
-        self.image = load_image('./png/character/ch1/walk/Walk_1.png')
-        self.sleep_image = load_image('./png/character/ch1/walk/Walk_1.png')
-        self.walk_image = load_image('./png/character/ch1/walk/Walk_1.png')
-        self.attack_image = load_image('./png/character/ch1/walk/Walk_1.png')
-        self.load_images()
+        global dungeon_map
+        dungeon_map = DungeonMap()
+        self.x, self.y = 1280 / 2, 720 / 2
+        self.camera_x = self.x - (1280 - 50) // 2
+        self.camera_y = self.y - (1280 - 50) // 2
+        self.frame = 0  # 캐릭터 프레임
+        self.action = 3  # 2 left 3 right
+        self.face_dir = 1  # 얼굴 방향
+        self.dir = 0  # 좌우 방향
+        self.dir2 = 0  # 위아래 방향
+        self.load_images()  # 캐릭터 이미지 모음
         self.font = load_font('ENCR10B.TTF', 16)
         self.state_machine = StateMachine(self)
         self.state_machine.start()
         self.ball_count = 10
+        self.player_width = 50  # 플레이어 크기 width
+        self.player_height = 50  # 플레이어 크기 height
 
     # def fire_ball(self):
     #     if self.ball_count > 0:
@@ -221,13 +268,21 @@ class PlayerCharacter:
 
     def update(self):
         self.state_machine.update()
+        self.camera_x += self.dir * RUN_SPEED_PPS * game_framework.frame_time
+        self.camera_y -= self.dir2 * RUN_SPEED_PPS * game_framework.frame_time
+
+        # 캐릭터가 화면 밖으로 나가지 않도록 clamp 함수를 사용하여 좌표 제한
+        self.x = clamp(25, self.x, 1200 - 25)
+        self.y = clamp(25, self.y, 720 - 25)
+
+        # DungeonMap의 map_x 업데이트
+        dungeon_map.map_x = self.camera_x
+        dungeon_map.map_y = self.camera_y
 
     def handle_event(self, event):
         self.state_machine.handle_event(('INPUT', event))
 
     def draw(self):
         self.state_machine.draw()
-        #self.font.draw(self.x - 10, self.y + 50, f'{self.ball_count:02d}', (255, 255, 0))
 
 
-    # fill here
