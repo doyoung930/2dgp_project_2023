@@ -7,8 +7,8 @@ from pico2d import get_time, load_image, load_font, clamp, SDLK_UP, SDLK_DOWN, S
 import game_world
 import game_framework
 from map import DungeonMap
-
-
+from skill import Shield
+import math
 # state event check
 # ( state event type, event value )
 
@@ -88,8 +88,7 @@ class Idle:
 
     @staticmethod
     def exit(playercharacter, e):
-        if space_down(e):
-            playercharacter.fire_ball()
+
         pass
 
     @staticmethod
@@ -100,6 +99,7 @@ class Idle:
 
     @staticmethod
     def draw(playercharacter):
+        playercharacter.Shield()
         playercharacter.images['Idle'][int(playercharacter.frame)].composite_draw(0, ' ', playercharacter.x,
                                                                                   playercharacter.y, 50, 50)
 
@@ -140,7 +140,8 @@ class Run:
     @staticmethod
     def draw(playercharacter):
         # DungeonMap 그리기
-        dungeon_map.draw()
+        #dungeon_map.draw()
+        playercharacter.Shield()
         if playercharacter.face_dir == -1:
             playercharacter.images['Walk'][int(playercharacter.frame)].composite_draw(0, 'h', playercharacter.x - 10,
                                                                                       playercharacter.y, 55, 55)
@@ -182,7 +183,8 @@ class Sleep:
     @staticmethod
     def draw(playercharacter):
         # DungeonMap 그리기
-        dungeon_map.draw()
+        #dungeon_map.draw()
+        playercharacter.Shield()
         if playercharacter.face_dir == -1:
             playercharacter.images['Idle'][int(playercharacter.frame)].composite_draw(0, 'h', playercharacter.x,
                                                                                       playercharacter.y, 50, 50)
@@ -222,12 +224,11 @@ class StateMachine:
 
     def draw(self):
         # DungeonMap 그리기
-        dungeon_map.draw()
+        game_world.add_object(dungeon_map)
         self.cur_state.draw(self.playercharacter)
 
 
 animation_names = ['Walk', 'Idle']
-animation_names2 = ['Idle']
 
 
 class PlayerCharacter:
@@ -241,6 +242,7 @@ class PlayerCharacter:
                                                 i in range(0, 5)]
 
     def __init__(self):
+
         global dungeon_map
         dungeon_map = DungeonMap()
         self.x, self.y = 1280 / 2, 720 / 2
@@ -259,6 +261,14 @@ class PlayerCharacter:
         self.player_width = 50  # 플레이어 크기 width
         self.player_height = 50  # 플레이어 크기 height
 
+        # shield
+        self.Shield_count = 5
+        self.angle = 0
+        self.shield_x = self.x + 100 * math.cos(math.radians(self.angle))
+        self.shield_y = self.y + 100 * math.sin(math.radians(self.angle))
+        self.angle_vel = 0
+        # 각도 업데이트
+
     # def fire_ball(self):
     #     if self.ball_count > 0:
     #         self.ball_count -= 1
@@ -266,6 +276,19 @@ class PlayerCharacter:
     #         game_world.add_object(ball)
     #         game_world.add_collision_pair('zombie:ball', None, ball)
 
+    def Shield(self):
+        for i in range ( 0, self.Shield_count):
+            self.angle = 360 // self.Shield_count * i
+            self.angle_vel += 10 * game_framework.frame_time * 5
+            self.angle +=self.angle_vel
+            if self.angle >= 360:
+                self.angle -= 360
+            self.shield_x = self.x + 100 * math.cos(math.radians(self.angle)) - 110
+            self.shield_y = self.y + 100 * math.sin(math.radians(self.angle))
+            if self.Shield_count > 0:
+                shield = Shield(self.shield_x, self.shield_y, 10, 100, 10)
+                game_world.add_object(shield)
+            #collision
     def update(self):
         self.state_machine.update()
         self.camera_x += self.dir * RUN_SPEED_PPS * game_framework.frame_time
