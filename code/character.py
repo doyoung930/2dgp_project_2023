@@ -7,6 +7,7 @@ from pico2d import get_time, load_image, load_font, clamp, SDLK_UP, SDLK_DOWN, S
 import game_world
 import game_framework
 from map import DungeonMap
+import skill
 from skill import Shield
 import math
 # state event check
@@ -63,7 +64,7 @@ RUN_SPEED_MPS = (RUN_SPEED_MPM / 60.0)
 RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
 
 # Boy Action Speed
-TIME_PER_ACTION = 0.5
+TIME_PER_ACTION = 1.0
 ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
 FRAMES_PER_ACTION = 8
 
@@ -88,7 +89,8 @@ class Idle:
 
     @staticmethod
     def exit(playercharacter, e):
-
+        if space_down(e):
+            playercharacter.Sword1()
         pass
 
     @staticmethod
@@ -120,8 +122,7 @@ class Run:
     @staticmethod
     def exit(playercharacter, e):
         if space_down(e):
-            playercharacter.fire_ball()
-
+            playercharacter.Sword1()
         pass
 
     @staticmethod
@@ -262,14 +263,34 @@ class PlayerCharacter:
         self.player_height = 50  # 플레이어 크기 height
         self.level = 0
         self.player_speed = 1
+
         # shield
-        self.Shield_count = 5
+        self.Shield_level = 0
         self.angle = 0
         self.shield_x = self.x + 100 * math.cos(math.radians(self.angle))
         self.shield_y = self.y + 100 * math.sin(math.radians(self.angle))
         self.angle_vel = 0
-        # 각도 업데이트
 
+        # sword1
+        self.sword1_level = 4
+        self.angle = 0
+        self.sword1_x = self.x
+        self.sword1_y = self.y
+
+
+        # sword2
+        self.sword2_level = 4
+        self.angle = 0
+        self.sword2_x = self.x
+        self.sword2_y = self.y
+
+        # axe
+        self.axe_level = 4
+        self.angle = 0
+        self.axe_x = self.x
+        self.axe_y = self.y
+
+        # 각도 업데이트
     # def fire_ball(self):
     #     if self.ball_count > 0:
     #         self.ball_count -= 1
@@ -278,18 +299,35 @@ class PlayerCharacter:
     #         game_world.add_collision_pair('zombie:ball', None, ball)
 
     def Shield(self):
-        for i in range ( 0, self.Shield_count):
-            self.angle = 360 // self.Shield_count * i
-            self.angle_vel += 10 * game_framework.frame_time * 5 * (6 -self.Shield_count)
+        for i in range (0, self.Shield_level):
+            self.angle = 360 // self.Shield_level * i
+            self.angle_vel += 10 * game_framework.frame_time * 5 * (6 - self.Shield_level)
             self.angle +=self.angle_vel
             if self.angle >= 360:
                 self.angle -= 360
             self.shield_x = self.x + 100 * math.cos(math.radians(self.angle)) - 110
             self.shield_y = self.y + 100 * math.sin(math.radians(self.angle))
-            if self.Shield_count > 0:
+            if self.Shield_level > 0:
                 shield = Shield(self.shield_x, self.shield_y, 10, 100, 10)
                 game_world.add_object(shield)
-            #collision
+                # collision
+                #game_world.add_collision_pair('zombie:ball', None, ball)
+    def Sword1(self):
+        if self.ball_count > 0:
+             self.ball_count -= 1
+             sword1 = skill.Sword1(self.x, self.y, self.dir*10, self.face_dir)
+             game_world.add_object(sword1)
+             #game_world.add_collision_pair('zombie:ball', None, sword1)
+    def Sword2(self):
+        pass
+    def Axe(self):
+        pass
+    def Shoes(self):
+        pass
+
+    def WarriorHat(self):
+        pass
+
     def update(self):
         self.state_machine.update()
         self.camera_x += self.dir * RUN_SPEED_PPS * game_framework.frame_time
