@@ -260,7 +260,8 @@ class PlayerCharacter:
         self.ball_count = 10
         self.player_width = 50  # 플레이어 크기 width
         self.player_height = 50  # 플레이어 크기 height
-
+        self.level = 0
+        self.player_speed = 1
         # shield
         self.Shield_count = 5
         self.angle = 0
@@ -279,7 +280,7 @@ class PlayerCharacter:
     def Shield(self):
         for i in range ( 0, self.Shield_count):
             self.angle = 360 // self.Shield_count * i
-            self.angle_vel += 10 * game_framework.frame_time * 5
+            self.angle_vel += 10 * game_framework.frame_time * 5 * (6 -self.Shield_count)
             self.angle +=self.angle_vel
             if self.angle >= 360:
                 self.angle -= 360
