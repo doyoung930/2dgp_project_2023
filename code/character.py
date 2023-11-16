@@ -67,6 +67,8 @@ RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
 TIME_PER_ACTION = 1.0
 ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
 FRAMES_PER_ACTION = 8
+FRAMES_PER_ACTION_MOVE = 5
+FRAMES_PER_ACTION_IDLE = 3
 
 
 class Idle:
@@ -81,7 +83,7 @@ class Idle:
             playercharacter.action = 3
         elif playercharacter.face_dir == -2:  # down
             playercharacter.action = 3
-        playercharacter.dir = 0
+        playercharacter.dir = 1
         playercharacter.dir2 = 0
         playercharacter.frame = 0
         playercharacter.wait_time = get_time()  # pico2d import 필요
@@ -95,13 +97,13 @@ class Idle:
 
     @staticmethod
     def do(playercharacter):
-        playercharacter.frame = (playercharacter.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 3
+        playercharacter.frame = (playercharacter.frame + FRAMES_PER_ACTION_IDLE * ACTION_PER_TIME * game_framework.frame_time) % 3
         if get_time() - playercharacter.wait_time > 2:
             playercharacter.state_machine.handle_event(('TIME_OUT', 0))
 
     @staticmethod
     def draw(playercharacter):
-        playercharacter.Shield()
+        #playercharacter.Shield()
         playercharacter.images['Idle'][int(playercharacter.frame)].composite_draw(0, ' ', playercharacter.x,
                                                                                   playercharacter.y, 50, 50)
 
@@ -110,13 +112,20 @@ class Run:
 
     @staticmethod
     def enter(playercharacter, e):
-        if right_down(e) or left_up(e):  # 오른쪽으로 RUN
+        if right_up(e) or left_up(e) or down_up(e) or up_up(e):
+            print(playercharacter.dir2, playercharacter.action, playercharacter.face_dir)
+            playercharacter.face_dir = 1
+        #if right_down(e) or left_up(e):  # 오른쪽으로 RUN
+        elif right_down(e):  # 오른쪽으로 RUN
             playercharacter.dir, playercharacter.action, playercharacter.face_dir = 1, 0, 1
-        elif left_down(e) or right_up(e):  # 왼쪽으로 RUN
+        #elif left_down(e) or right_up(e):  # 왼쪽으로 RUN
+        elif left_down(e):  # 왼쪽으로 RUN
             playercharacter.dir, playercharacter.action, playercharacter.face_dir = -1, 0, -1
-        elif up_up(e) or down_down(e):
+        #elif up_up(e) or down_down(e):
+        elif down_down(e):
             playercharacter.dir2, playercharacter.action, playercharacter.face_dir = 1, 0, -2
-        elif up_down or down_up(e):
+        #elif up_down(e) or down_up(e):
+        elif up_down(e):
             playercharacter.dir2, playercharacter.action, playercharacter.face_dir = -1, 0, 2
 
     @staticmethod
@@ -136,13 +145,13 @@ class Run:
             playercharacter.y = clamp(25, playercharacter.y, 1600 - 25)
 
         playercharacter.frame = (
-                                            playercharacter.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 5
+                                            playercharacter.frame + FRAMES_PER_ACTION_MOVE * ACTION_PER_TIME * game_framework.frame_time) % 5
 
     @staticmethod
     def draw(playercharacter):
         # DungeonMap 그리기
         #dungeon_map.draw()
-        playercharacter.Shield()
+        #playercharacter.Shield()
         if playercharacter.face_dir == -1:
             playercharacter.images['Walk'][int(playercharacter.frame)].composite_draw(0, 'h', playercharacter.x - 10,
                                                                                       playercharacter.y, 55, 55)
@@ -185,7 +194,7 @@ class Sleep:
     def draw(playercharacter):
         # DungeonMap 그리기
         #dungeon_map.draw()
-        playercharacter.Shield()
+        #playercharacter.Shield()
         if playercharacter.face_dir == -1:
             playercharacter.images['Idle'][int(playercharacter.frame)].composite_draw(0, 'h', playercharacter.x,
                                                                                       playercharacter.y, 50, 50)
@@ -225,7 +234,7 @@ class StateMachine:
 
     def draw(self):
         # DungeonMap 그리기
-        game_world.add_object(dungeon_map)
+        #game_world.add_object(dungeon_map)
         self.cur_state.draw(self.playercharacter)
 
 
@@ -313,9 +322,8 @@ class PlayerCharacter:
                 # collision
                 #game_world.add_collision_pair('zombie:ball', None, ball)
     def Sword1(self):
-        if self.ball_count > 0:
-             self.ball_count -= 1
-             sword1 = skill.Sword1(self.x, self.y, self.dir*10, self.face_dir)
+             sword1 = skill.Sword1(self.x, self.y, self.dir*10, self.face_dir, self.dir2*10)
+             #print(self.face_dir)
              game_world.add_object(sword1)
              #game_world.add_collision_pair('zombie:ball', None, sword1)
     def Sword2(self):
