@@ -1,5 +1,5 @@
 objects = [[] for _ in range(5)]
-
+collision_pairs = {}
 # fill here
 
 def add_object(o, depth = 0):
@@ -27,6 +27,7 @@ def remove_object(o):
     for layer in objects:
         if o in layer:
             layer.remove(o)
+            del o
             return
     raise ValueError('Cannot delete non existing object')
 

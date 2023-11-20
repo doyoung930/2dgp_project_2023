@@ -31,7 +31,7 @@ def init():
     game_world.add_object(dungeon_map, 0)
 
     playercharacter = PlayerCharacter()
-    game_world.add_object(playercharacter, 1)
+    game_world.add_object(playercharacter, 2)
 
     # fill here
 
