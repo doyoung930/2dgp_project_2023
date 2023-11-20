@@ -6,6 +6,8 @@ import game_framework
 import game_world
 from map import DungeonMap
 from character import PlayerCharacter
+import skill
+
 #from ball import Ball
 #from zombie import Zombie
 
@@ -32,6 +34,12 @@ def init():
 
     playercharacter = PlayerCharacter()
     game_world.add_object(playercharacter, 2)
+    #
+    # shield = skill.Shield()
+    # game_world.add_object(playercharacter, 2)
+    # sword1 = skill.Sword1()
+    # game_world.add_object(playercharacter, 2)
+
 
     # fill here
 
