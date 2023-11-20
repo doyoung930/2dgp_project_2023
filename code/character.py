@@ -10,6 +10,8 @@ from map import DungeonMap
 import skill
 from skill import Shield
 import math
+
+
 # state event check
 # ( state event type, event value )
 
@@ -29,20 +31,20 @@ def left_up(e):
     return e[0] == 'INPUT' and e[1].type == SDL_KEYUP and e[1].key == SDLK_LEFT
 
 
-def up_up(e):
-    return e[0] == 'INPUT' and e[1].type == SDL_KEYUP and e[1].key == SDLK_UP
-
-
-def up_down(e):
+def upkey_down(e):
     return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_UP
 
 
-def down_up(e):
-    return e[0] == 'INPUT' and e[1].type == SDL_KEYUP and e[1].key == SDLK_DOWN
+def upkey_up(e):
+    return e[0] == 'INPUT' and e[1].type == SDL_KEYUP and e[1].key == SDLK_UP
 
 
-def down_down(e):
+def downkey_down(e):
     return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_DOWN
+
+
+def downkey_up(e):
+    return e[0] == 'INPUT' and e[1].type == SDL_KEYUP and e[1].key == SDLK_DOWN
 
 
 def space_down(e):
@@ -97,36 +99,22 @@ class Idle:
 
     @staticmethod
     def do(playercharacter):
-        playercharacter.frame = (playercharacter.frame + FRAMES_PER_ACTION_IDLE * ACTION_PER_TIME * game_framework.frame_time) % 3
-        if get_time() - playercharacter.wait_time > 2:
-            playercharacter.state_machine.handle_event(('TIME_OUT', 0))
+        playercharacter.frame = (playercharacter.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 3
 
     @staticmethod
     def draw(playercharacter):
-        #playercharacter.Shield()
+        # playercharacter.Shield()
         playercharacter.images['Idle'][int(playercharacter.frame)].composite_draw(0, ' ', playercharacter.x,
                                                                                   playercharacter.y, 50, 50)
 
 
-class Run:
 
+class RunRight:
     @staticmethod
     def enter(playercharacter, e):
-        if right_up(e) or left_up(e) or down_up(e) or up_up(e):
-            print(playercharacter.dir2, playercharacter.action, playercharacter.face_dir)
-            playercharacter.face_dir = 1
-        #if right_down(e) or left_up(e):  # 오른쪽으로 RUN
-        elif right_down(e):  # 오른쪽으로 RUN
-            playercharacter.dir, playercharacter.action, playercharacter.face_dir = 1, 0, 1
-        #elif left_down(e) or right_up(e):  # 왼쪽으로 RUN
-        elif left_down(e):  # 왼쪽으로 RUN
-            playercharacter.dir, playercharacter.action, playercharacter.face_dir = -1, 0, -1
-        #elif up_up(e) or down_down(e):
-        elif down_down(e):
-            playercharacter.dir2, playercharacter.action, playercharacter.face_dir = 1, 0, -2
-        #elif up_down(e) or down_up(e):
-        elif up_down(e):
-            playercharacter.dir2, playercharacter.action, playercharacter.face_dir = -1, 0, 2
+        playercharacter.action = 1
+        playercharacter.face_dir = 1
+        pass
 
     @staticmethod
     def exit(playercharacter, e):
@@ -136,28 +124,206 @@ class Run:
 
     @staticmethod
     def do(playercharacter):
-        # playercharacter.frame = (playercharacter.frame + 1) % 8
-        if playercharacter.face_dir == -1 or playercharacter.face_dir == 1:
-            # playercharacter.x += playercharacter.dir * RUN_SPEED_PPS * game_framework.frame_time
-            playercharacter.x = clamp(25, playercharacter.x, 1600 - 25)
-        elif playercharacter.face_dir == -2 or playercharacter.face_dir == 2:
-            # playercharacter.y -= playercharacter.dir2 * RUN_SPEED_PPS * game_framework.frame_time
-            playercharacter.y = clamp(25, playercharacter.y, 1600 - 25)
-
-        playercharacter.frame = (
-                                            playercharacter.frame + FRAMES_PER_ACTION_MOVE * ACTION_PER_TIME * game_framework.frame_time) % 5
+        playercharacter.frame = (playercharacter.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 3
+        playercharacter.x += RUN_SPEED_PPS * game_framework.frame_time
+        playercharacter.x = clamp(25, playercharacter.x, 1280 - 25)
+        playercharacter.y = clamp(25, playercharacter.y, 720 - 25)
+        pass
 
     @staticmethod
     def draw(playercharacter):
-        # DungeonMap 그리기
-        #dungeon_map.draw()
-        #playercharacter.Shield()
-        if playercharacter.face_dir == -1:
-            playercharacter.images['Walk'][int(playercharacter.frame)].composite_draw(0, 'h', playercharacter.x - 10,
-                                                                                      playercharacter.y, 55, 55)
-        else:
-            playercharacter.images['Walk'][int(playercharacter.frame)].composite_draw(0, ' ', playercharacter.x,
-                                                                                      playercharacter.y, 55, 55)
+        playercharacter.images['Walk'][int(playercharacter.frame)].composite_draw(0, ' ', playercharacter.x,
+                                                                                  playercharacter.y, 55, 55)
+
+
+class RunRightUp:
+    @staticmethod
+    def enter(playercharacter, e):
+        playercharacter.action = 1
+        playercharacter.face_dir = 2
+        pass
+
+    @staticmethod
+    def exit(playercharacter, e):
+        if space_down(e):
+            playercharacter.Sword1()
+        pass
+    @staticmethod
+    def do(playercharacter):
+        playercharacter.frame = (playercharacter.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 3
+        playercharacter.x += RUN_SPEED_PPS * game_framework.frame_time
+        playercharacter.y += RUN_SPEED_PPS * game_framework.frame_time
+        playercharacter.x = clamp(25, playercharacter.x, 1280 - 25)
+        playercharacter.y = clamp(25, playercharacter.y, 720 - 25)
+        pass
+
+    @staticmethod
+    def draw(playercharacter):
+        playercharacter.images['Walk'][int(playercharacter.frame)].composite_draw(0, ' ', playercharacter.x,
+                                                                                  playercharacter.y, 55, 55)
+
+
+class RunRightDown:
+    @staticmethod
+    def enter(playercharacter, e):
+        playercharacter.action = 1
+        playercharacter.face_dir = 3
+        pass
+
+    @staticmethod
+    def exit(playercharacter, e):
+        if space_down(e):
+            playercharacter.Sword1()
+        pass
+
+    @staticmethod
+    def do(playercharacter):
+        playercharacter.frame = (playercharacter.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 3
+        playercharacter.x += RUN_SPEED_PPS * game_framework.frame_time
+        playercharacter.y -= RUN_SPEED_PPS * game_framework.frame_time
+        playercharacter.x = clamp(25, playercharacter.x, 1280 - 25)
+        playercharacter.y = clamp(25, playercharacter.y, 720 - 25)
+        pass
+
+    @staticmethod
+    def draw(playercharacter):
+        playercharacter.images['Walk'][int(playercharacter.frame)].composite_draw(0, ' ', playercharacter.x,
+                                                                                  playercharacter.y, 55, 55)
+
+
+class RunLeft:
+    @staticmethod
+    def enter(playercharacter, e):
+        playercharacter.action = 0
+        playercharacter.face_dir = 4
+        pass
+
+    def exit(playercharacter, e):
+        if space_down(e):
+            playercharacter.Sword1()
+        pass
+
+    @staticmethod
+    def do(playercharacter):
+        playercharacter.frame = (playercharacter.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 3
+        playercharacter.x -= RUN_SPEED_PPS * game_framework.frame_time
+        playercharacter.x = clamp(25, playercharacter.x, 1280 - 25)
+        playercharacter.y = clamp(25, playercharacter.y, 720 - 25)
+
+        pass
+
+    @staticmethod
+    def draw(playercharacter):
+        playercharacter.images['Walk'][int(playercharacter.frame)].composite_draw(0, 'h', playercharacter.x - 10,
+                                                                                  playercharacter.y, 55, 55)
+
+class RunLeftUp:
+    @staticmethod
+    def enter(playercharacter, e):
+        playercharacter.action = 0
+        playercharacter.face_dir = 5
+        pass
+
+    def exit(playercharacter, e):
+        if space_down(e):
+            playercharacter.Sword1()
+        pass
+
+    @staticmethod
+    def do(playercharacter):
+        playercharacter.frame = (playercharacter.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 3
+        playercharacter.x -= RUN_SPEED_PPS * game_framework.frame_time
+        playercharacter.y += RUN_SPEED_PPS * game_framework.frame_time
+        playercharacter.x = clamp(25, playercharacter.x, 1280 - 25)
+        playercharacter.y = clamp(25, playercharacter.y, 720 - 25)
+
+    @staticmethod
+    def draw(playercharacter):
+        playercharacter.images['Walk'][int(playercharacter.frame)].composite_draw(0, 'h', playercharacter.x - 10,
+                                                                                  playercharacter.y, 55, 55)
+class RunLeftDown:
+    @staticmethod
+    def enter(playercharacter, e):
+        playercharacter.action = 0
+        playercharacter.face_dir = 6
+        pass
+
+    @staticmethod
+    def exit(playercharacter, e):
+        if space_down(e):
+            playercharacter.Sword1()
+        pass
+
+    @staticmethod
+    def do(playercharacter):
+        playercharacter.frame = (playercharacter.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 3
+        playercharacter.x -= RUN_SPEED_PPS * game_framework.frame_time
+        playercharacter.y -= RUN_SPEED_PPS * game_framework.frame_time
+        playercharacter.x = clamp(25, playercharacter.x, 1280 - 25)
+        playercharacter.y = clamp(25, playercharacter.y, 720 - 25)
+
+    @staticmethod
+    def draw(playercharacter):
+        playercharacter.images['Walk'][int(playercharacter.frame)].composite_draw(0, 'h', playercharacter.x - 10,
+                                                                                  playercharacter.y, 55, 55)
+class RunUp:
+    @staticmethod
+    def enter(playercharacter, e):
+        if playercharacter.action == 2:
+            playercharacter.action = 0
+        elif playercharacter.action == 3:
+            playercharacter.action = 1
+        playercharacter.face_dir = 7
+
+
+    @staticmethod
+    def exit(playercharacter, e):
+        if space_down(e):
+            playercharacter.Sword1()
+        pass
+
+    @staticmethod
+    def do(playercharacter):
+        playercharacter.frame = (playercharacter.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 3
+        playercharacter.y += RUN_SPEED_PPS * game_framework.frame_time
+        playercharacter.x = clamp(25, playercharacter.x, 1280 - 25)
+        playercharacter.y = clamp(25, playercharacter.y, 720 - 25)
+        pass
+
+    @staticmethod
+    def draw(playercharacter):
+        playercharacter.images['Walk'][int(playercharacter.frame)].composite_draw(0, 'h', playercharacter.x - 10,
+                                                                                  playercharacter.y, 55, 55)
+class RunDown:
+    @staticmethod
+    def enter(playercharacter, e):
+        if playercharacter.action == 2:
+            playercharacter.action = 0
+        elif playercharacter.action == 3:
+            playercharacter.action = 1
+        playercharacter.face_dir = 8
+        pass
+
+    @staticmethod
+    def exit(playercharacter, e):
+        if space_down(e):
+            playercharacter.Sword1()
+        pass
+
+    @staticmethod
+    def do(playercharacter):
+        playercharacter.frame = (playercharacter.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 3
+        playercharacter.y -= RUN_SPEED_PPS * game_framework.frame_time
+        playercharacter.x = clamp(25, playercharacter.x, 1280 - 25)
+        playercharacter.y = clamp(25, playercharacter.y, 720 - 25)
+        pass
+
+    @staticmethod
+    def draw(playercharacter):
+        playercharacter.images['Walk'][int(playercharacter.frame)].composite_draw(0, ' ', playercharacter.x,
+                                                                                  playercharacter.y, 55, 55)
+
+
 class Attack:
     def enter(playercharacter, e):
         pass
@@ -167,12 +333,11 @@ class Attack:
 
     @staticmethod
     def do(playercharacter):
-        pass
+           pass
 
     @staticmethod
     def draw(playercharacter):
         pass
-
 
 class Sleep:
 
@@ -188,33 +353,36 @@ class Sleep:
     @staticmethod
     def do(playercharacter):
         playercharacter.frame = (
-                                            playercharacter.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 5
+                                        playercharacter.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 5
 
     @staticmethod
     def draw(playercharacter):
-        # DungeonMap 그리기
-        #dungeon_map.draw()
-        #playercharacter.Shield()
+            # DungeonMap 그리기
+            # dungeon_map.draw()
+            # playercharacter.Shield()
         if playercharacter.face_dir == -1:
             playercharacter.images['Idle'][int(playercharacter.frame)].composite_draw(0, 'h', playercharacter.x,
-                                                                                      playercharacter.y, 50, 50)
+                                                                                          playercharacter.y, 50, 50)
         else:
             playercharacter.images['Idle'][int(playercharacter.frame)].composite_draw(0, ' ', playercharacter.x,
-                                                                                      playercharacter.y, 50, 50)
-
+                                                                                          playercharacter.y, 50, 50)
 
 class StateMachine:
     def __init__(self, playercharacter):
         self.playercharacter = playercharacter
         self.cur_state = Idle
         self.transitions = {
-            Idle: {right_down: Run, left_down: Run, left_up: Run, right_up: Run, up_down: Run, down_down: Run,
-                   up_up: Run, down_up: Run, time_out: Sleep, space_down: Idle},
-            Run: {right_down: Idle, left_down: Idle, right_up: Idle, left_up: Idle, up_down: Idle, down_down: Idle,
-                  up_up: Idle, down_up: Idle, space_down: Run},
-            Sleep: {right_down: Run, left_down: Run, right_up: Run, left_up: Run, up_down: Run, down_down: Run,
-                    up_up: Run, down_up: Run}
+            Idle: {right_down: RunRight, left_down: RunLeft, left_up: RunRight, right_up: RunLeft, upkey_down: RunUp,downkey_down: RunDown, upkey_up: RunDown, downkey_up: RunUp, space_down: Idle},
+            RunRight: {right_up: Idle, left_down: Idle, upkey_down: RunRightUp, upkey_up: RunRightDown,downkey_down: RunRightDown, downkey_up: RunRightUp, space_down: RunRight},
+            RunRightUp: {upkey_up: RunRight, right_up: RunUp, left_down: RunUp, downkey_down: RunRight, space_down: RunRightUp},
+            RunUp: {upkey_up: Idle, left_down: RunLeftUp, downkey_down: Idle, right_down: RunRightUp,left_up: RunRightUp, right_up: RunLeftUp, space_down: RunUp},
+            RunLeftUp: {right_down: RunUp, downkey_down: RunLeft, left_up: RunUp, upkey_up: RunLeft, space_down: RunLeftUp},
+            RunLeft: {left_up: Idle, upkey_down: RunLeftUp, right_down: Idle, downkey_down: RunLeftDown,upkey_up: RunLeftDown, downkey_up: RunLeftUp, space_down: RunLeft},
+            RunLeftDown: {left_up: RunDown, downkey_up: RunLeft, upkey_down: RunLeft, right_down: RunDown, space_down: RunLeftDown},
+            RunDown: {downkey_up: Idle, left_down: RunLeftDown, upkey_down: Idle, right_down: RunRightDown,left_up: RunRightDown, right_up: RunLeftDown, space_down: RunDown},
+            RunRightDown: {right_up: RunDown, downkey_up: RunRight, left_down: RunDown, upkey_down: RunRight, space_down: RunRightDown}
         }
+
 
     def start(self):
         self.cur_state.enter(self.playercharacter, ('NONE', 0))
@@ -229,26 +397,23 @@ class StateMachine:
                 self.cur_state = next_state
                 self.cur_state.enter(self.playercharacter, e)
                 return True
-
         return False
 
     def draw(self):
         # DungeonMap 그리기
-        #game_world.add_object(dungeon_map)
+        # game_world.add_object(dungeon_map)
         self.cur_state.draw(self.playercharacter)
-
 
 animation_names = ['Walk', 'Idle']
 
-
 class PlayerCharacter:
     images = None
-
     def load_images(self):
         if PlayerCharacter.images == None:
             PlayerCharacter.images = {}
             for name in animation_names:
-                PlayerCharacter.images[name] = [load_image("./png/character/ch1/walk/" + name + "_%d" % i + ".png") for
+                PlayerCharacter.images[name] = [load_image("./png/character/ch1/walk/" + name + "_%d" % i + ".png")
+                                                for
                                                 i in range(0, 5)]
 
     def __init__(self):
@@ -272,7 +437,6 @@ class PlayerCharacter:
         self.player_height = 50  # 플레이어 크기 height
         self.level = 0
         self.player_speed = 1
-
         # shield
         self.Shield_level = 0
         self.angle = 0
@@ -286,7 +450,6 @@ class PlayerCharacter:
         self.sword1_x = self.x
         self.sword1_y = self.y
 
-
         # sword2
         self.sword2_level = 4
         self.angle = 0
@@ -299,19 +462,20 @@ class PlayerCharacter:
         self.axe_x = self.x
         self.axe_y = self.y
 
-        # 각도 업데이트
-    # def fire_ball(self):
-    #     if self.ball_count > 0:
-    #         self.ball_count -= 1
-    #         ball = Ball(self.x, self.y, self.face_dir*10)
-    #         game_world.add_object(ball)
-    #         game_world.add_collision_pair('zombie:ball', None, ball)
+            # 각도 업데이트
+
+        # def fire_ball(self):
+        #     if self.ball_count > 0:
+        #         self.ball_count -= 1
+        #         ball = Ball(self.x, self.y, self.face_dir*10)
+        #         game_world.add_object(ball)
+        #         game_world.add_collision_pair('zombie:ball', None, ball)
 
     def Shield(self):
-        for i in range (0, self.Shield_level):
+        for i in range(0, self.Shield_level):
             self.angle = 360 // self.Shield_level * i
             self.angle_vel += 10 * game_framework.frame_time * 5 * (6 - self.Shield_level)
-            self.angle +=self.angle_vel
+            self.angle += self.angle_vel
             if self.angle >= 360:
                 self.angle -= 360
             self.shield_x = self.x + 100 * math.cos(math.radians(self.angle)) - 110
@@ -320,16 +484,20 @@ class PlayerCharacter:
                 shield = Shield(self.shield_x, self.shield_y, 10, 100, 10)
                 game_world.add_object(shield)
                 # collision
-                #game_world.add_collision_pair('zombie:ball', None, ball)
+                # game_world.add_collision_pair('zombie:ball', None, ball)
+
     def Sword1(self):
-             sword1 = skill.Sword1(self.x, self.y, self.dir*10, self.face_dir, self.dir2*10)
-             #print(self.face_dir)
-             game_world.add_object(sword1)
-             #game_world.add_collision_pair('zombie:ball', None, sword1)
+        sword1 = skill.Sword1(self.x, self.y, self.dir * 10, self.face_dir, self.dir2 * 10)
+        # print(self.face_dir)
+        game_world.add_object(sword1)
+        # game_world.add_collision_pair('zombie:ball', None, sword1)
+
     def Sword2(self):
         pass
+
     def Axe(self):
         pass
+
     def Shoes(self):
         pass
 
@@ -340,11 +508,9 @@ class PlayerCharacter:
         self.state_machine.update()
         self.camera_x += self.dir * RUN_SPEED_PPS * game_framework.frame_time
         self.camera_y -= self.dir2 * RUN_SPEED_PPS * game_framework.frame_time
-
         # 캐릭터가 화면 밖으로 나가지 않도록 clamp 함수를 사용하여 좌표 제한
         self.x = clamp(25, self.x, 1200 - 25)
         self.y = clamp(25, self.y, 720 - 25)
-
         # DungeonMap의 map_x 업데이트
         dungeon_map.map_x = self.camera_x
         dungeon_map.map_y = self.camera_y
@@ -354,5 +520,3 @@ class PlayerCharacter:
 
     def draw(self):
         self.state_machine.draw()
-
-
