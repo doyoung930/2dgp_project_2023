@@ -490,30 +490,41 @@ class PlayerCharacter:
     #             # collision
     #             # game_world.add_collision_pair('zombie:ball', None, ball)
     def Shield(self):
-        print(self.Shield_level)
-        if self.Shield_level > 0:
-            for i in range(0, self.Shield_level):
-                angle = 360 // self.Shield_level * i
-                angle_vel = 10 * game_framework.frame_time * 5 * (6 - self.Shield_level)
-                angle += angle_vel
-                if angle >= 360:
-                    angle -= 360
-                shield_x = self.x + 100 * math.cos(math.radians(angle)) - 110
-                shield_y = self.y + 100 * math.sin(math.radians(angle))
-
-                # 실드가 이미 생성되었는지 확인하고 생성되지 않았다면 생성
-                if not hasattr(self, 'shield'):
-                    self.shield = skill.Shield(shield_x, shield_y, 10, 100, 10)
-                    game_world.add_object(self.shield)
-                else:
-                    # 실드가 이미 생성되어 있다면 위치만 업데이트
-                    self.shield.x = shield_x
-                    self.shield.y = shield_y
-        else:
-            # 레벨이 0인 경우 실드를 제거
-            if hasattr(self, 'shield'):
-                game_world.remove_object(self.shield)
-                del self.shield
+        for i in range(0, self.Shield_level):
+            self.angle = 360 // self.Shield_level * i
+            self.angle_vel += 10 * game_framework.frame_time * 5
+            self.angle_vel += 10 * game_framework.frame_time * 5 * (6 - self.Shield_level)
+            self.angle += self.angle_vel
+            if self.angle >= 360:
+                self.angle -= 360
+            self.shield_x = self.x + 100 * math.cos(math.radians(self.angle)) - 110
+            self.shield_y = self.y + 100 * math.sin(math.radians(self.angle))
+            if self.Shield_level > 0:
+                shield = Shield(self.shield_x, self.shield_y, 10, 100, 10)
+                game_world.add_object(shield)
+        # if self.Shield_level > 0:
+        #     for i in range(0, self.Shield_level):
+        #         angle = 360 // self.Shield_level * i
+        #         angle_vel = 10 * game_framework.frame_time * 5 * (6 - self.Shield_level)
+        #         angle += angle_vel
+        #         if angle >= 360:
+        #             angle -= 360
+        #         shield_x = self.x + 100 * math.cos(math.radians(angle)) - 110
+        #         shield_y = self.y + 100 * math.sin(math.radians(angle))
+        #
+        #         # 실드가 이미 생성되었는지 확인하고 생성되지 않았다면 생성
+        #         if not hasattr(self, 'shield'):
+        #             self.shield = skill.Shield(shield_x, shield_y, 10, 100, 10)
+        #             game_world.add_object(self.shield)
+        #         else:
+        #             # 실드가 이미 생성되어 있다면 위치만 업데이트
+        #             self.shield.x = shield_x
+        #             self.shield.y = shield_y
+        # else:
+        #     # 레벨이 0인 경우 실드를 제거
+        #     if hasattr(self, 'shield'):
+        #         game_world.remove_object(self.shield)
+        #         del self.shield
     def Sword1(self):
         sword1 = skill.Sword1(self.x, self.y, self.dir * 10, self.face_dir, self.dir2 * 10)
         # print(self.face_dir)
