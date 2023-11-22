@@ -489,6 +489,7 @@ class PlayerCharacter:
     #             # collision
     #             # game_world.add_collision_pair('zombie:ball', None, ball)
     def Shield(self):
+
         print(self.Shield_level)
         if self.Shield_level > 0:
             for i in range(0, self.Shield_level):
