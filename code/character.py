@@ -437,8 +437,7 @@ class PlayerCharacter:
         self.ball_count = 10
         self.player_width = 50  # 플레이어 크기 width
         self.player_height = 50  # 플레이어 크기 height
-        self.level = 0
-        self.player_speed = 1
+
         # shield
         self.Shield_level = 1
         self.angle = 0
@@ -531,7 +530,6 @@ class PlayerCharacter:
 
     def WarriorHat(self):
         pass
-
     def update(self):
         self.state_machine.update()
         self.camera_x += self.dir * RUN_SPEED_PPS * game_framework.frame_time
