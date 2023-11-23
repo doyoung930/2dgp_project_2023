@@ -7,7 +7,7 @@ from pico2d import get_time, load_image, load_font, clamp, SDLK_UP, SDLK_DOWN, S
 import game_world
 import game_framework
 from map import DungeonMap
-from character_obj import Exp
+from character_obj import Exp, HP
 import skill
 from skill import Shield
 import math
@@ -102,6 +102,7 @@ class Idle:
 
     @staticmethod
     def do(playercharacter):
+
         playercharacter.frame = (playercharacter.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 3
 
     @staticmethod
@@ -137,7 +138,6 @@ class RunRight:
     @staticmethod
     def draw(playercharacter):
         playercharacter.Shield()
-
         playercharacter.images['Walk'][int(playercharacter.frame)].composite_draw(0, ' ', playercharacter.x,
                                                                                   playercharacter.y, 55, 55)
 
@@ -440,53 +440,49 @@ class PlayerCharacter:
         self.dir = 0  # 좌우 방향
         self.dir2 = 0  # 위아래 방향
         self.load_images()  # 캐릭터 이미지 모음
+        self.HP_image = load_image('./png/gui/hp_gauge2.png')
         self.state_machine = StateMachine(self)
         self.state_machine.start()
         self.player_width = 50  # 플레이어 크기 width
         self.player_height = 50  # 플레이어 크기 height
         self.level = 0
+        self.next_level = 1
         self.player_speed = 1
         self.exp = 0        # 플레이어 경험치
-        # shield
-        self.Shield_level = 5
-        self.shield_x = self.x
-        self.shield_y = self.y
-        self.angle = 0
-        self.angle_vel = 0
+        self.hp = 100
 
+        # shield1
+        self.shield_image = load_image("./png/weapon/shield-05.png")
+        self.Shield_level = 5
+        self.shield_angle = 0
+        self.shield_radius = 100
+        self.shield_x = self.x
+        self.shield_y = self.y + 100 * math.sin(math.radians(self.shield_angle))
         # sword1
         self.sword1_level = 1
-        self.angle = 0
         self.sword1_x = self.x
         self.sword1_y = self.y
 
         # sword2
         self.sword2_level = 1
-        self.angle = 0
         self.sword2_x = self.x
         self.sword2_y = self.y
 
         # axe
         self.axe_level = 1
-        self.angle = 0
         self.axe_x = self.x
         self.axe_y = self.y
 
     def character_exp(self):
         exp = Exp(self.exp)
         game_world.add_object(exp)
+    def character_hp(self):
+        hp = HP(self.hp, self.x, self.y)
+        game_world.add_object(hp)
 
     def Shield(self):
-        pass
-        #for i in range(0, self.Shield_level):
-        #    self.angle = 360 // self.Shield_level
-        #    self.angle_vel += 10 * game_framework.frame_time * 5
-        #    #self.angle += self.angle_vel
-        #    self.shield_x = self.x + 100 * math.cos(math.radians(self.angle)) - 110
-        #    self.shield_y = self.y + 100 * math.sin(math.radians(self.angle))
-        #    if self.Shield_level > 0:
-        #        shield = Shield(self.shield_x, self.shield_y, 10, 100, 10, self.angle)
-        #        game_world.add_object(shield)
+        if self.Shield_level > 0:
+            self.shield_image.composite_draw(0, ' ', self.shield_x, self.shield_y, 40, 40)
 
     def Sword1(self):
         sword1 = skill.Sword1(self.x, self.y, self.dir * 10, self.face_dir, self.dir2 * 10)
@@ -506,11 +502,20 @@ class PlayerCharacter:
 
     def update(self):
         self.state_machine.update()
-
+        # 플레이어의 좌표를 중점으로 원운동
+        self.shield_angle += 1
+        self.shield_x = self.x + 100 * math.cos(math.radians(self.shield_angle))
+        self.shield_y = self.y + 100 * math.sin(math.radians(self.shield_angle))
+        # 각도 업데이트
+        print(self.shield_angle)
+        # 각도가 360도를 넘어가면 360도로 초기화
+        if self.shield_angle >= 360:
+            self.shield_angle -= 360
 
     def handle_event(self, event):
         self.state_machine.handle_event(('INPUT', event))
 
     def draw(self):
         self.state_machine.draw()
-
+        self.HP_image.composite_draw(0, ' ', self.x-10, self.y+30, self.hp/2, 5)
+        self.Shield()
