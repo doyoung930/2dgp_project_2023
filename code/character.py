@@ -7,6 +7,7 @@ from pico2d import get_time, load_image, load_font, clamp, SDLK_UP, SDLK_DOWN, S
 import game_world
 import game_framework
 from map import DungeonMap
+from character_obj import Exp
 import skill
 from skill import Shield
 import math
@@ -106,6 +107,7 @@ class Idle:
     @staticmethod
     def draw(playercharacter):
         playercharacter.Shield()
+        playercharacter.character_exp()
         playercharacter.images['Idle'][int(playercharacter.frame)].composite_draw(0, ' ', playercharacter.x,
                                                                                   playercharacter.y, 50, 50)
 
@@ -135,6 +137,7 @@ class RunRight:
     @staticmethod
     def draw(playercharacter):
         playercharacter.Shield()
+
         playercharacter.images['Walk'][int(playercharacter.frame)].composite_draw(0, ' ', playercharacter.x,
                                                                                   playercharacter.y, 55, 55)
 
@@ -443,7 +446,7 @@ class PlayerCharacter:
         self.player_height = 50  # 플레이어 크기 height
         self.level = 0
         self.player_speed = 1
-        self.Experience = 0        # 플레이어 경험치
+        self.exp = 0        # 플레이어 경험치
         # shield
         self.Shield_level = 5
         self.shield_x = self.x
@@ -468,6 +471,10 @@ class PlayerCharacter:
         self.angle = 0
         self.axe_x = self.x
         self.axe_y = self.y
+
+    def character_exp(self):
+        exp = Exp(self.exp)
+        game_world.add_object(exp)
 
     def Shield(self):
         pass
@@ -499,17 +506,11 @@ class PlayerCharacter:
 
     def update(self):
         self.state_machine.update()
-        self.camera_x += self.dir * RUN_SPEED_PPS * game_framework.frame_time
-        self.camera_y -= self.dir2 * RUN_SPEED_PPS * game_framework.frame_time
-        # 캐릭터가 화면 밖으로 나가지 않도록 clamp 함수를 사용하여 좌표 제한
-        self.x = clamp(25, self.x, 1200 - 25)
-        self.y = clamp(25, self.y, 720 - 25)
-        # DungeonMap의 map_x 업데이트
-        dungeon_map.map_x = self.camera_x
-        dungeon_map.map_y = self.camera_y
+
 
     def handle_event(self, event):
         self.state_machine.handle_event(('INPUT', event))
 
     def draw(self):
         self.state_machine.draw()
+

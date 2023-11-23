@@ -6,6 +6,7 @@ import game_framework
 import game_world
 from map import DungeonMap
 from character import PlayerCharacter
+from character_obj import BaseGauge
 import skill
 
 #from ball import Ball
@@ -31,8 +32,13 @@ def init():
     dungeon_map = DungeonMap()
     game_world.add_object(dungeon_map, 0)
 
+    basegauge = BaseGauge()
+    game_world.add_object(basegauge, 0)
+
     playercharacter = PlayerCharacter()
     game_world.add_object(playercharacter, 2)
+
+
     #
     # shield = skill.Shield()
     # game_world.add_object(playercharacter, 2)
