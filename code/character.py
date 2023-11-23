@@ -134,6 +134,7 @@ class RunRight:
 
     @staticmethod
     def draw(playercharacter):
+        playercharacter.Shield()
         playercharacter.images['Walk'][int(playercharacter.frame)].composite_draw(0, ' ', playercharacter.x,
                                                                                   playercharacter.y, 55, 55)
 
@@ -161,6 +162,7 @@ class RunRightUp:
 
     @staticmethod
     def draw(playercharacter):
+        playercharacter.Shield()
         playercharacter.images['Walk'][int(playercharacter.frame)].composite_draw(0, ' ', playercharacter.x,
                                                                                   playercharacter.y, 55, 55)
 
@@ -189,6 +191,7 @@ class RunRightDown:
 
     @staticmethod
     def draw(playercharacter):
+        playercharacter.Shield()
         playercharacter.images['Walk'][int(playercharacter.frame)].composite_draw(0, ' ', playercharacter.x,
                                                                                   playercharacter.y, 55, 55)
 
@@ -216,6 +219,7 @@ class RunLeft:
 
     @staticmethod
     def draw(playercharacter):
+        playercharacter.Shield()
         playercharacter.images['Walk'][int(playercharacter.frame)].composite_draw(0, 'h', playercharacter.x - 10,
                                                                                   playercharacter.y, 55, 55)
 
@@ -241,6 +245,7 @@ class RunLeftUp:
 
     @staticmethod
     def draw(playercharacter):
+        playercharacter.Shield()
         playercharacter.images['Walk'][int(playercharacter.frame)].composite_draw(0, 'h', playercharacter.x - 10,
                                                                                   playercharacter.y, 55, 55)
 class RunLeftDown:
@@ -266,6 +271,7 @@ class RunLeftDown:
 
     @staticmethod
     def draw(playercharacter):
+        playercharacter.Shield()
         playercharacter.images['Walk'][int(playercharacter.frame)].composite_draw(0, 'h', playercharacter.x - 10,
                                                                                   playercharacter.y, 55, 55)
 class RunUp:
@@ -294,6 +300,7 @@ class RunUp:
 
     @staticmethod
     def draw(playercharacter):
+        playercharacter.Shield()
         playercharacter.images['Walk'][int(playercharacter.frame)].composite_draw(0, 'h', playercharacter.x - 10,
                                                                                   playercharacter.y, 55, 55)
 class RunDown:
@@ -322,6 +329,7 @@ class RunDown:
 
     @staticmethod
     def draw(playercharacter):
+        playercharacter.Shield()
         playercharacter.images['Walk'][int(playercharacter.frame)].composite_draw(0, ' ', playercharacter.x,
                                                                                   playercharacter.y, 55, 55)
 
@@ -359,9 +367,6 @@ class Sleep:
 
     @staticmethod
     def draw(playercharacter):
-            # DungeonMap 그리기
-            # dungeon_map.draw()
-            # playercharacter.Shield()
         if playercharacter.face_dir == -1:
             playercharacter.images['Idle'][int(playercharacter.frame)].composite_draw(0, 'h', playercharacter.x,
                                                                                           playercharacter.y, 50, 50)
@@ -425,111 +430,60 @@ class PlayerCharacter:
         self.x, self.y = 1280 / 2, 720 / 2
         self.camera_x = self.x - (1280 - 50) // 2
         self.camera_y = self.y - (1280 - 50) // 2
+        
         self.frame = 0  # 캐릭터 프레임
         self.action = 3  # 2 left 3 right
         self.face_dir = 1  # 얼굴 방향
         self.dir = 0  # 좌우 방향
         self.dir2 = 0  # 위아래 방향
         self.load_images()  # 캐릭터 이미지 모음
-        self.font = load_font('ENCR10B.TTF', 16)
         self.state_machine = StateMachine(self)
         self.state_machine.start()
-        self.ball_count = 10
         self.player_width = 50  # 플레이어 크기 width
         self.player_height = 50  # 플레이어 크기 height
         self.level = 0
         self.player_speed = 1
+        self.Experience = 0        # 플레이어 경험치
         # shield
-        self.Shield_level = 1
+        self.Shield_level = 5
+        self.shield_x = self.x
+        self.shield_y = self.y
         self.angle = 0
-        self.shield_x = self.x + 100 * math.cos(math.radians(self.angle))
-        self.shield_y = self.y + 100 * math.sin(math.radians(self.angle))
         self.angle_vel = 0
 
         # sword1
-        self.sword1_level = 4
+        self.sword1_level = 1
         self.angle = 0
         self.sword1_x = self.x
         self.sword1_y = self.y
 
         # sword2
-        self.sword2_level = 4
+        self.sword2_level = 1
         self.angle = 0
         self.sword2_x = self.x
         self.sword2_y = self.y
 
         # axe
-        self.axe_level = 4
+        self.axe_level = 1
         self.angle = 0
         self.axe_x = self.x
         self.axe_y = self.y
 
-            # 각도 업데이트
-
-        # def fire_ball(self):
-        #     if self.ball_count > 0:
-        #         self.ball_count -= 1
-        #         ball = Ball(self.x, self.y, self.face_dir*10)
-        #         game_world.add_object(ball)
-        #         game_world.add_collision_pair('zombie:ball', None, ball)
-
-    # def Shield(self):
-    #     print(self.Shield_level)
-    #     for i in range(0, self.Shield_level):
-    #         self.angle = 360 // self.Shield_level * i
-    #         self.angle_vel += 10 * game_framework.frame_time * 5 * (6 - self.Shield_level)
-    #         self.angle += self.angle_vel
-    #         if self.angle >= 360:
-    #             self.angle -= 360
-    #         self.shield_x = self.x + 100 * math.cos(math.radians(self.angle)) - 110
-    #         self.shield_y = self.y + 100 * math.sin(math.radians(self.angle))
-    #
-    #         if self.Shield_level > 0:
-    #             shield = skill.Shield(self.shield_x, self.shield_y, 10, 100, 10)
-    #             game_world.add_object(shield)
-    #             # collision
-    #             # game_world.add_collision_pair('zombie:ball', None, ball)
     def Shield(self):
-        for i in range(0, self.Shield_level):
-            self.angle = 360 // self.Shield_level * i
-            self.angle_vel += 10 * game_framework.frame_time * 5
-            self.angle_vel += 10 * game_framework.frame_time * 5 * (6 - self.Shield_level)
-            self.angle += self.angle_vel
-            if self.angle >= 360:
-                self.angle -= 360
-            self.shield_x = self.x + 100 * math.cos(math.radians(self.angle)) - 110
-            self.shield_y = self.y + 100 * math.sin(math.radians(self.angle))
-            if self.Shield_level > 0:
-                shield = Shield(self.shield_x, self.shield_y, 10, 100, 10)
-                game_world.add_object(shield)
-        # if self.Shield_level > 0:
-        #     for i in range(0, self.Shield_level):
-        #         angle = 360 // self.Shield_level * i
-        #         angle_vel = 10 * game_framework.frame_time * 5 * (6 - self.Shield_level)
-        #         angle += angle_vel
-        #         if angle >= 360:
-        #             angle -= 360
-        #         shield_x = self.x + 100 * math.cos(math.radians(angle)) - 110
-        #         shield_y = self.y + 100 * math.sin(math.radians(angle))
-        #
-        #         # 실드가 이미 생성되었는지 확인하고 생성되지 않았다면 생성
-        #         if not hasattr(self, 'shield'):
-        #             self.shield = skill.Shield(shield_x, shield_y, 10, 100, 10)
-        #             game_world.add_object(self.shield)
-        #         else:
-        #             # 실드가 이미 생성되어 있다면 위치만 업데이트
-        #             self.shield.x = shield_x
-        #             self.shield.y = shield_y
-        # else:
-        #     # 레벨이 0인 경우 실드를 제거
-        #     if hasattr(self, 'shield'):
-        #         game_world.remove_object(self.shield)
-        #         del self.shield
+        pass
+        #for i in range(0, self.Shield_level):
+        #    self.angle = 360 // self.Shield_level
+        #    self.angle_vel += 10 * game_framework.frame_time * 5
+        #    #self.angle += self.angle_vel
+        #    self.shield_x = self.x + 100 * math.cos(math.radians(self.angle)) - 110
+        #    self.shield_y = self.y + 100 * math.sin(math.radians(self.angle))
+        #    if self.Shield_level > 0:
+        #        shield = Shield(self.shield_x, self.shield_y, 10, 100, 10, self.angle)
+        #        game_world.add_object(shield)
+
     def Sword1(self):
         sword1 = skill.Sword1(self.x, self.y, self.dir * 10, self.face_dir, self.dir2 * 10)
-        # print(self.face_dir)
         game_world.add_object(sword1)
-        # game_world.add_collision_pair('zombie:ball', None, sword1)
 
     def Sword2(self):
         pass

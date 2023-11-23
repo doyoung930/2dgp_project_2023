@@ -11,7 +11,6 @@ import skill
 #from ball import Ball
 #from zombie import Zombie
 
-playercharacter = None
 
 def handle_events():
     events = get_events()
@@ -41,10 +40,6 @@ def init():
     # game_world.add_object(playercharacter, 2)
 
 
-    # fill here
-
-
-
 def finish():
     game_world.clear()
     pass
@@ -52,7 +47,7 @@ def finish():
 
 def update():
     game_world.update()
-    # fill here
+
 
 def draw():
     clear_canvas()

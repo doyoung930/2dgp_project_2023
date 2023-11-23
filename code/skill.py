@@ -30,30 +30,30 @@ class Ball:
 class Shield:
     image = None
 
-    def __init__(self, x, y, velocity=1, radius=100, angular_velocity=10):
+    def __init__(self, shield_x, shield_y, velocity=1, radius=100, angular_velocity=10, angle = 0):
         if Shield.image == None:
             Shield.image = load_image("./png/weapon/shield-05.png")
-        self.x, self.y, self.velocity = x, y, velocity
+        self.shield_x, self.shield_y, self.velocity = shield_x, shield_y, velocity
         self.radius = radius  # 원운동 반지름
         self.angular_velocity = angular_velocity  # 각속도
-        self.angle = 0  # 각도 초기값
+        self.angle = angle  # 각도 초기값
         self.image_w = 40
         self.image_h = 40
 
     def draw(self):
-        self.image.composite_draw(0, ' ', self.x, self.y, self.image_w, self.image_h)
+        self.image.composite_draw(0, ' ', self.shield_x, self.shield_y, self.image_w, self.image_h)
 
     def update(self):
         # 플레이어의 좌표를 중점으로 원운동
-        self.x = self.x + self.radius * math.cos(math.radians(self.angle))
-        self.y = self.y + self.radius * math.sin(math.radians(self.angle))
+        self.angle += 10
+        self.shield_x = self.shield_x + self.radius * math.cos(math.radians(self.angle))
+        self.shield_y = self.shield_y + self.radius * math.sin(math.radians(self.angle))
 
         # 각도 업데이트
-        self.angle += self.angular_velocity * game_framework.frame_time * 20
+        #self.angle += self.angular_velocity * game_framework.frame_time * 20
         # 각도가 360도를 넘어가면 360도로 초기화
         if self.angle >= 360:
             self.angle -= 360
-        pass
 
 # 검이 전방으로 날아감 ( 짧은 사거리 공격 속도 빠름)
 class Sword1:
