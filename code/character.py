@@ -459,16 +459,19 @@ class PlayerCharacter:
         self.shield_x = self.x
         self.shield_y = self.y + 100 * math.sin(math.radians(self.shield_angle))
         # sword1
+        #self.shield_image = load_image("./png/weapon/shield-05.png")
         self.sword1_level = 1
         self.sword1_x = self.x
         self.sword1_y = self.y
 
         # sword2
+        self.sword2_image = load_image("./png/weapon/Sword-2-05.png")
         self.sword2_level = 1
         self.sword2_x = self.x
         self.sword2_y = self.y
 
         # axe
+        self.axe_image = load_image("./png/weapon/axe-03.png")
         self.axe_level = 1
         self.axe_x = self.x
         self.axe_y = self.y
@@ -476,23 +479,30 @@ class PlayerCharacter:
     def character_exp(self):
         exp = Exp(self.exp)
         game_world.add_object(exp)
-    def character_hp(self):
-        hp = HP(self.hp, self.x, self.y)
-        game_world.add_object(hp)
 
     def Shield(self):
-        if self.Shield_level > 0:
+        #if self.Shield_level > 0:
+        #    self.shield_image.composite_draw(0, ' ', self.shield_x, self.shield_y, 40, 40)
+        for i in range(1, self.Shield_level+1):
+            # 플레이어의 좌표를 중점으로 원운동
+            self.shield_angle += 0.5/self.Shield_level
+            # 각도가 360도를 넘어가면 360도로 초기화
+            if self.shield_angle+(360/i) >= 360:
+                self.shield_angle -= 360
+            self.shield_x = self.x + 100 * math.cos(math.radians(self.shield_angle+(360/self.Shield_level)*i))
+            self.shield_y = self.y + 100 * math.sin(math.radians(self.shield_angle+(360/self.Shield_level)*i))
             self.shield_image.composite_draw(0, ' ', self.shield_x, self.shield_y, 40, 40)
-
     def Sword1(self):
         sword1 = skill.Sword1(self.x, self.y, self.dir * 10, self.face_dir, self.dir2 * 10)
         game_world.add_object(sword1)
 
     def Sword2(self):
-        pass
+        if self.sword2_level > 0:
+            self.sword2_image.composite_draw(0, ' ', self.sword2_x, self.sword2_y, 40, 40)
 
     def Axe(self):
-        pass
+        if self.axe_level > 0:
+            self.axe_image.composite_draw(0, ' ', self.axe_x, self.axe_y, 40, 40)
 
     def Shoes(self):
         pass
@@ -502,15 +512,8 @@ class PlayerCharacter:
 
     def update(self):
         self.state_machine.update()
-        # 플레이어의 좌표를 중점으로 원운동
-        self.shield_angle += 1
-        self.shield_x = self.x + 100 * math.cos(math.radians(self.shield_angle))
-        self.shield_y = self.y + 100 * math.sin(math.radians(self.shield_angle))
-        # 각도 업데이트
-        print(self.shield_angle)
-        # 각도가 360도를 넘어가면 360도로 초기화
-        if self.shield_angle >= 360:
-            self.shield_angle -= 360
+
+
 
     def handle_event(self, event):
         self.state_machine.handle_event(('INPUT', event))
