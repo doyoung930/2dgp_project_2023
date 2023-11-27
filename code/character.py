@@ -453,7 +453,7 @@ class PlayerCharacter:
 
         # shield1
         self.shield_image = load_image("./png/weapon/shield-05.png")
-        self.Shield_level = 5
+        self.Shield_level = 1
         self.shield_angle = 0
         self.shield_radius = 100
         self.shield_x = self.x
@@ -466,10 +466,21 @@ class PlayerCharacter:
 
         # sword2
         self.sword2_image = load_image("./png/weapon/Sword-2-05.png")
-        self.sword2_level = 1
-        self.sword2_speed = 10
+        self.sword2_level = 8
+        self.sword2_speed = 5
+        self.sword2_angle = 0
         self.sword2_x = self.x
         self.sword2_y = self.y
+        self.sword2_pos =[
+            (self.x, self.y),
+            (self.x, self.y),
+            (self.x, self.y),
+            (self.x, self.y),
+            (self.x, self.y),
+            (self.x, self.y),
+            (self.x, self.y),
+            (self.x, self.y),
+        ]
 
         # axe
         self.axe_image = load_image("./png/weapon/axe-03.png")
@@ -477,6 +488,13 @@ class PlayerCharacter:
         self.axe_speed = 10
         self.axe_x = self.x
         self.axe_y = self.y
+        self.sword2_pos = [
+            (self.x, self.y),
+            (self.x, self.y),
+            (self.x, self.y),
+            (self.x, self.y),
+            (self.x, self.y),
+        ]
 
     def character_exp(self):
         exp = Exp(self.exp)
@@ -494,21 +512,27 @@ class PlayerCharacter:
                 self.shield_x = self.x + 100 * math.cos(math.radians(self.shield_angle+(360/self.Shield_level)*i))
                 self.shield_y = self.y + 100 * math.sin(math.radians(self.shield_angle+(360/self.Shield_level)*i))
                 self.shield_image.composite_draw(0, ' ', self.shield_x, self.shield_y, 40, 40)
+
     def Sword1(self):
         sword1 = skill.Sword1(self.x, self.y, self.dir * 10, self.face_dir, self.dir2 * 10)
         game_world.add_object(sword1)
 
     def Sword2(self):
+        # 리스트를 이용해 칼 총 8개를 관리 해야함.
+        # 1 x ++ 2 x -- 3 y++ 4 y -- 5 오른쪽 위 6 오른쪽 밑 7 왼쪽 위 8 왼쪽 밑
         if self.sword2_level > 0:
-            for i in range(1, self.sword2_level+1):
-                # 플레이어의 좌표를 중점으로 원운동
-                self.shield_angle += 0.5/self.Shield_level
-                # 각도가 360도를 넘어가면 360도로 초기화
-                if self.shield_angle+(360/i) >= 360:
-                    self.shield_angle -= 360
-                self.shield_x = self.x + 100 * math.cos(math.radians(self.shield_angle+(360/self.Shield_level)*i))
-                self.shield_y = self.y + 100 * math.sin(math.radians(self.shield_angle+(360/self.Shield_level)*i))
-                self.sword2_image.composite_draw(0, ' ', self.sword2_x, self.sword2_y, 40, 40)
+            for i in range(0, self.sword2_level):
+                self.sword2_angle -= 0.5
+                if i == 0:
+                    self.sword2_pos[i] = (self.sword2_pos[i][0]+ self.sword2_speed, self.sword2_pos[i][1])
+                    self.sword2_image.composite_draw(self.sword2_angle, ' ', self.sword2_pos[i][0], self.sword2_pos[i][1], 40, 40)
+                if i == 1:
+                    self.sword2_pos[i] = (self.sword2_pos[i][0] - self.sword2_speed, self.sword2_pos[i][1])
+                    self.sword2_image.composite_draw(self.sword2_angle, 'h', self.sword2_pos[i][0], self.sword2_pos[i][1], 40, 40)
+
+
+                if self.sword2_pos[i][0] > 1600:
+                    self.sword2_pos[i] = (self.x, self.y)
 
 
     def Axe(self):
@@ -533,3 +557,4 @@ class PlayerCharacter:
         self.state_machine.draw()
         self.HP_image.composite_draw(0, ' ', self.x-10, self.y+30, self.hp/2, 5)
         self.Shield()
+        self.Sword2()
