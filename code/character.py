@@ -466,7 +466,7 @@ class PlayerCharacter:
 
         # sword2
         self.sword2_image = load_image("./png/weapon/Sword-2-05.png")
-        self.sword2_level = 8
+        self.sword2_level = 1
         self.sword2_speed = 5
         self.sword2_angle = 0
         self.sword2_x = self.x
@@ -488,7 +488,7 @@ class PlayerCharacter:
         self.axe_speed = 10
         self.axe_x = self.x
         self.axe_y = self.y
-        self.sword2_pos = [
+        self.axe_pos = [
             (self.x, self.y),
             (self.x, self.y),
             (self.x, self.y),
@@ -520,18 +520,35 @@ class PlayerCharacter:
     def Sword2(self):
         # 리스트를 이용해 칼 총 8개를 관리 해야함.
         # 1 x ++ 2 x -- 3 y++ 4 y -- 5 오른쪽 위 6 오른쪽 밑 7 왼쪽 위 8 왼쪽 밑
+        self.sword2_angle -= 0.5
         if self.sword2_level > 0:
             for i in range(0, self.sword2_level):
-                self.sword2_angle -= 0.5
                 if i == 0:
                     self.sword2_pos[i] = (self.sword2_pos[i][0]+ self.sword2_speed, self.sword2_pos[i][1])
                     self.sword2_image.composite_draw(self.sword2_angle, ' ', self.sword2_pos[i][0], self.sword2_pos[i][1], 40, 40)
                 if i == 1:
                     self.sword2_pos[i] = (self.sword2_pos[i][0] - self.sword2_speed, self.sword2_pos[i][1])
                     self.sword2_image.composite_draw(self.sword2_angle, 'h', self.sword2_pos[i][0], self.sword2_pos[i][1], 40, 40)
-
-
-                if self.sword2_pos[i][0] > 1600:
+                if i == 2:
+                    self.sword2_pos[i] = (self.sword2_pos[i][0] , self.sword2_pos[i][1] + self.sword2_speed)
+                    self.sword2_image.composite_draw(self.sword2_angle, '', self.sword2_pos[i][0], self.sword2_pos[i][1], 40, 40)
+                if i == 3:
+                    self.sword2_pos[i] = (self.sword2_pos[i][0] , self.sword2_pos[i][1] - self.sword2_speed)
+                    self.sword2_image.composite_draw(self.sword2_angle, 'h', self.sword2_pos[i][0], self.sword2_pos[i][1], 40, 40)
+                if i == 4:
+                    self.sword2_pos[i] = (self.sword2_pos[i][0] + self.sword2_speed, self.sword2_pos[i][1] + self.sword2_speed)
+                    self.sword2_image.composite_draw(self.sword2_angle, '', self.sword2_pos[i][0], self.sword2_pos[i][1], 40, 40)
+                if i == 5:
+                    self.sword2_pos[i] = (self.sword2_pos[i][0] + self.sword2_speed, self.sword2_pos[i][1] - self.sword2_speed)
+                    self.sword2_image.composite_draw(self.sword2_angle, '', self.sword2_pos[i][0], self.sword2_pos[i][1], 40, 40)
+                if i == 6:
+                    self.sword2_pos[i] = (self.sword2_pos[i][0] - self.sword2_speed, self.sword2_pos[i][1] + self.sword2_speed)
+                    self.sword2_image.composite_draw(self.sword2_angle, 'h', self.sword2_pos[i][0], self.sword2_pos[i][1], 40, 40)
+                if i == 7:
+                    self.sword2_pos[i] = (self.sword2_pos[i][0] - self.sword2_speed, self.sword2_pos[i][1] - self.sword2_speed)
+                    self.sword2_image.composite_draw(self.sword2_angle, 'h', self.sword2_pos[i][0], self.sword2_pos[i][1], 40, 40)
+            if self.sword2_pos[0][0] > 4000:
+                for i in range(0, self.sword2_level):
                     self.sword2_pos[i] = (self.x, self.y)
 
 
