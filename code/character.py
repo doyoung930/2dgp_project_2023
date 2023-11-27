@@ -7,7 +7,7 @@ from pico2d import get_time, load_image, load_font, clamp, SDLK_UP, SDLK_DOWN, S
 import game_world
 import game_framework
 from map import DungeonMap
-from character_obj import Exp, HP
+from character_obj import Exp
 import skill
 from skill import Shield
 import math
