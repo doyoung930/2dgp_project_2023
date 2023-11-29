@@ -8,7 +8,7 @@ import game_framework
 from map import DungeonMap
 from character_obj import Exp
 import skill
-from skill import Shield
+
 import math
 
 

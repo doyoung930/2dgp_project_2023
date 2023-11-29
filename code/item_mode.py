@@ -8,15 +8,17 @@ from item_select import Item_Select
 def init():
     global item_select
     item_select = Item_Select()
-    game_world.add_object(item_select, 3)
+    game_world.add_object(item_select, 2)
 
 def finish():
     game_world.remove_object(item_select)
 
-def update(): pass
+def update():
+    pass
 
 
-def draw(): pass
+def draw():
+    # global item_select
 
 
 def handle_events():
