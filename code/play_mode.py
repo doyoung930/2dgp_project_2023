@@ -42,13 +42,6 @@ def init():
     game_world.add_object(playercharacter, 2)
 
 
-    #
-    # shield = skill.Shield()
-    # game_world.add_object(playercharacter, 2)
-    # sword1 = skill.Sword1()
-    # game_world.add_object(playercharacter, 2)
-
-
 def finish():
     game_world.clear()
     pass
