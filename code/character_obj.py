@@ -26,5 +26,5 @@ class Exp:
     def draw(self):
         self.image.composite_draw(0, ' ', 20+self.w//2, 710, self.w, 10)
     def update(self):
-        self.w = self.exp/100*1240
+        self.w = self.exp/1000*1240
         pass

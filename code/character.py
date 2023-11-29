@@ -445,11 +445,17 @@ class PlayerCharacter:
         self.state_machine.start()
         self.player_width = 50  # 플레이어 크기 width
         self.player_height = 50  # 플레이어 크기 height
+
         self.level = 0
         self.next_level = 1
+
         self.player_speed = 1
+
         self.exp = 0        # 플레이어 경험치
+        self.max_exp = 1000
+
         self.hp = 100
+        self.max_hp = 100
 
         # shield1
         self.shield_image = load_image("./png/weapon/shield-05.png")
@@ -484,16 +490,31 @@ class PlayerCharacter:
 
         # axe
         self.axe_image = load_image("./png/weapon/axe-03.png")
-        self.axe_level = 1
-        self.axe_speed = 10
+        self.axe_level = 4
+        self.axe_x_speed = 0.3
+        self.axe_dx_speed = 0.3
+        self.axe_x_speed2 = 0.5
+        self.axe_dx_speed2 = 0.5
+        self.axe_y_speed = 1
+        self.axe_dy_speed = 0.5
+        self.axe_y_speed2 = 1
+        self.axe_dy_speed2 = 0.5
+        # self.axe_x_speed = 3
+        # self.axe_dx_speed = 3
+        # self.axe_x_speed2 = 5
+        # self.axe_dx_speed2 = 5
+        # self.axe_y_speed = 5
+        # self.axe_dy_speed = 5
+        self.axe_x_gravity = 0.001
+        self.axe_y_gravity = 0.005
+        self.axe_angle = 0
         self.axe_x = self.x
         self.axe_y = self.y
         self.axe_pos = [
             (self.x, self.y),
             (self.x, self.y),
             (self.x, self.y),
-            (self.x, self.y),
-            (self.x, self.y),
+            (self.x, self.y)
         ]
 
     def character_exp(self):
@@ -554,7 +575,29 @@ class PlayerCharacter:
 
     def Axe(self):
         if self.axe_level > 0:
-            self.axe_image.composite_draw(0, ' ', self.axe_x, self.axe_y, 40, 40)
+            for i in range(0, self.axe_level):
+                if i == 0:
+                    self.axe_pos[i] = (self.axe_pos[i][0] + self.axe_x_speed , self.axe_pos[i][1] + self.axe_y_speed)
+                    self.axe_image.composite_draw(self.axe_angle, ' ', self.axe_pos[i][0],
+                                                     self.axe_pos[i][1], 40, 40)
+                if i == 1:
+                    self.axe_pos[i] = (self.axe_pos[i][0] - self.axe_x_speed, self.axe_pos[i][1] + self.axe_y_speed)
+                    self.axe_image.composite_draw(self.axe_angle, 'h', self.axe_pos[i][0],
+                                                     self.axe_pos[i][1], 40, 40)
+                if i == 2:
+                    self.axe_pos[i] = (self.axe_pos[i][0] + self.axe_x_speed2, self.axe_pos[i][1])
+                    self.axe_image.composite_draw(self.axe_angle, '', self.axe_pos[i][0],
+                                                     self.axe_pos[i][1], 40, 40)
+                if i == 3:
+                    self.axe_pos[i] = (self.axe_pos[i][0] - self.axe_x_speed2, self.axe_pos[i][1])
+                    self.axe_image.composite_draw(self.axe_angle, 'h', self.axe_pos[i][0],
+                                                     self.axe_pos[i][1], 40, 40)
+            if self.axe_x_speed <= 0.1:
+                self.axe_x_speed = 0.1
+                self.axe_x_gravity = 0
+            else:
+                self.axe_x_speed -= self.axe_x_gravity
+            self.axe_y_speed -= self.axe_y_gravity
 
     def Shoes(self):
         pass
@@ -575,3 +618,4 @@ class PlayerCharacter:
         self.HP_image.composite_draw(0, ' ', self.x-10, self.y+30, self.hp/2, 5)
         self.Shield()
         self.Sword2()
+        self.Axe()
