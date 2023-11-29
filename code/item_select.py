@@ -5,7 +5,7 @@ class Item_Select:
         self.image = load_image('./png/gui/Shop_screen.png')
 
     def draw(self):
-        self.image.draw(400, 300)
+        self.image.composite_draw(0, ' ', 300, 300, 400, 600)
 
     def update(self):
         pass

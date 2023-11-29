@@ -8,7 +8,7 @@ from item_select import Item_Select
 def init():
     global item_select
     item_select = Item_Select()
-    game_world.add_object()
+    game_world.add_object(item_select, 3)
 
 def finish():
     game_world.remove_object(item_select)
