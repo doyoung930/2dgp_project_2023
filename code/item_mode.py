@@ -1,14 +1,17 @@
 import game_framework
+import game_world
 from pico2d import load_image, delay, clear_canvas, update_canvas, get_events, get_time
 import pico2d
 
-from item_
+from item_select import Item_Select
 
-def init(): pass
+def init():
+    global item_select
+    item_select = Item_Select()
+    game_world.add_object()
 
-
-def finish(): pass
-
+def finish():
+    game_world.remove_object(item_select)
 
 def update(): pass
 

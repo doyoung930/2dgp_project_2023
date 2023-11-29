@@ -1,6 +1,6 @@
 from pico2d import load_image
 
-class item_select:
+class Item_Select:
     def __init__(self):
         self.image = load_image('./png/gui/Shop_screen.png')
 
