@@ -474,7 +474,7 @@ class PlayerCharacter:
         # sword2
         self.sword2_image = load_image("./png/weapon/Sword-2-05.png")
         self.sword2_level = 1
-        self.sword2_speed = 5
+        self.sword2_speed = 3
         self.sword2_angle = 0
         self.sword2_x = self.x
         self.sword2_y = self.y
@@ -491,7 +491,7 @@ class PlayerCharacter:
 
         # axe
         self.axe_image = load_image("./png/weapon/axe-03.png")
-        self.axe_level = 4
+        self.axe_level = 1
         self.axe_x_speed = 0.3
         self.axe_dx_speed = 0.3
         self.axe_x_speed2 = 0.5
@@ -524,7 +524,7 @@ class PlayerCharacter:
         #    self.shield_image.composite_draw(0, ' ', self.shield_x, self.shield_y, 40, 40)
             for i in range(1, self.Shield_level+1):
                 # 플레이어의 좌표를 중점으로 원운동
-                self.shield_angle += 0.5/self.Shield_level
+                self.shield_angle += 0.5/self.Shield_level * 250 * game_framework.frame_time
                 # 각도가 360도를 넘어가면 360도로 초기화
                 if self.shield_angle+(360/i) >= 360:
                     self.shield_angle -= 360
@@ -543,28 +543,28 @@ class PlayerCharacter:
         if self.sword2_level > 0:
             for i in range(0, self.sword2_level):
                 if i == 0:
-                    self.sword2_pos[i] = (self.sword2_pos[i][0]+ self.sword2_speed, self.sword2_pos[i][1])
+                    self.sword2_pos[i] = (self.sword2_pos[i][0]+ self.sword2_speed * 300 * game_framework.frame_time, self.sword2_pos[i][1])
                     self.sword2_image.composite_draw(self.sword2_angle, ' ', self.sword2_pos[i][0], self.sword2_pos[i][1], 40, 40)
                 if i == 1:
-                    self.sword2_pos[i] = (self.sword2_pos[i][0] - self.sword2_speed, self.sword2_pos[i][1])
+                    self.sword2_pos[i] = (self.sword2_pos[i][0] - self.sword2_speed * 300 * game_framework.frame_time, self.sword2_pos[i][1])
                     self.sword2_image.composite_draw(self.sword2_angle, 'h', self.sword2_pos[i][0], self.sword2_pos[i][1], 40, 40)
                 if i == 2:
-                    self.sword2_pos[i] = (self.sword2_pos[i][0] , self.sword2_pos[i][1] + self.sword2_speed)
+                    self.sword2_pos[i] = (self.sword2_pos[i][0] , self.sword2_pos[i][1] + self.sword2_speed* 300 * game_framework.frame_time)
                     self.sword2_image.composite_draw(self.sword2_angle, '', self.sword2_pos[i][0], self.sword2_pos[i][1], 40, 40)
                 if i == 3:
-                    self.sword2_pos[i] = (self.sword2_pos[i][0] , self.sword2_pos[i][1] - self.sword2_speed)
+                    self.sword2_pos[i] = (self.sword2_pos[i][0] , self.sword2_pos[i][1] - self.sword2_speed* 300 * game_framework.frame_time)
                     self.sword2_image.composite_draw(self.sword2_angle, 'h', self.sword2_pos[i][0], self.sword2_pos[i][1], 40, 40)
                 if i == 4:
-                    self.sword2_pos[i] = (self.sword2_pos[i][0] + self.sword2_speed, self.sword2_pos[i][1] + self.sword2_speed)
+                    self.sword2_pos[i] = (self.sword2_pos[i][0] + self.sword2_speed * 300 * game_framework.frame_time, self.sword2_pos[i][1] + self.sword2_speed* 300 * game_framework.frame_time)
                     self.sword2_image.composite_draw(self.sword2_angle, '', self.sword2_pos[i][0], self.sword2_pos[i][1], 40, 40)
                 if i == 5:
-                    self.sword2_pos[i] = (self.sword2_pos[i][0] + self.sword2_speed, self.sword2_pos[i][1] - self.sword2_speed)
+                    self.sword2_pos[i] = (self.sword2_pos[i][0] + self.sword2_speed * 300 * game_framework.frame_time, self.sword2_pos[i][1] - self.sword2_speed* 300 * game_framework.frame_time)
                     self.sword2_image.composite_draw(self.sword2_angle, '', self.sword2_pos[i][0], self.sword2_pos[i][1], 40, 40)
                 if i == 6:
-                    self.sword2_pos[i] = (self.sword2_pos[i][0] - self.sword2_speed, self.sword2_pos[i][1] + self.sword2_speed)
+                    self.sword2_pos[i] = (self.sword2_pos[i][0] - self.sword2_speed * 300 * game_framework.frame_time, self.sword2_pos[i][1] + self.sword2_speed* 300 * game_framework.frame_time)
                     self.sword2_image.composite_draw(self.sword2_angle, 'h', self.sword2_pos[i][0], self.sword2_pos[i][1], 40, 40)
                 if i == 7:
-                    self.sword2_pos[i] = (self.sword2_pos[i][0] - self.sword2_speed, self.sword2_pos[i][1] - self.sword2_speed)
+                    self.sword2_pos[i] = (self.sword2_pos[i][0] - self.sword2_speed * 300 * game_framework.frame_time, self.sword2_pos[i][1] - self.sword2_speed* 300 * game_framework.frame_time)
                     self.sword2_image.composite_draw(self.sword2_angle, 'h', self.sword2_pos[i][0], self.sword2_pos[i][1], 40, 40)
             if self.sword2_pos[0][0] > 4000:
                 for i in range(0, self.sword2_level):
@@ -575,23 +575,23 @@ class PlayerCharacter:
         if self.axe_level > 0:
             for i in range(0, self.axe_level):
                 if i == 0:
-                    self.axe_pos[i] = (self.axe_pos[i][0] + self.axe_x_speed , self.axe_pos[i][1] + self.axe_y_speed)
+                    self.axe_pos[i] = (self.axe_pos[i][0] + self.axe_x_speed * 300 * game_framework.frame_time , self.axe_pos[i][1] + self.axe_y_speed* 300 * game_framework.frame_time)
                     self.axe_image.composite_draw(self.axe_angle2, ' ', self.axe_pos[i][0],
                                                      self.axe_pos[i][1], 60, 60)
                 if i == 1:
-                    self.axe_pos[i] = (self.axe_pos[i][0] - self.axe_x_speed, self.axe_pos[i][1] + self.axe_y_speed)
+                    self.axe_pos[i] = (self.axe_pos[i][0] - self.axe_x_speed* 300 * game_framework.frame_time, self.axe_pos[i][1] + self.axe_y_speed* 300 * game_framework.frame_time)
                     self.axe_image.composite_draw(self.axe_angle, 'h', self.axe_pos[i][0],
                                                      self.axe_pos[i][1], 60, 60)
                 if i == 2:
-                    self.axe_pos[i] = (self.axe_pos[i][0] + self.axe_x_speed2, self.axe_pos[i][1]+ self.axe_y_speed2)
+                    self.axe_pos[i] = (self.axe_pos[i][0] + self.axe_x_speed2* 300 * game_framework.frame_time, self.axe_pos[i][1]+ self.axe_y_speed2* 300 * game_framework.frame_time)
                     self.axe_image.composite_draw(self.axe_angle2, '', self.axe_pos[i][0],
                                                      self.axe_pos[i][1], 60, 60)
                 if i == 3:
-                    self.axe_pos[i] = (self.axe_pos[i][0] - self.axe_x_speed2, self.axe_pos[i][1]+ self.axe_y_speed2)
+                    self.axe_pos[i] = (self.axe_pos[i][0] - self.axe_x_speed2 * 300 * game_framework.frame_time, self.axe_pos[i][1]+ self.axe_y_speed2* 300 * game_framework.frame_time)
                     self.axe_image.composite_draw(self.axe_angle, 'h', self.axe_pos[i][0],
                                                      self.axe_pos[i][1], 60, 60)
-            self.axe_angle+=0.01
-            self.axe_angle2-=0.01
+            self.axe_angle+=0.01  * 300 * game_framework.frame_time
+            self.axe_angle2-=0.01  * 300 * game_framework.frame_time
             if self.axe_x_speed <= 0.2:
                 self.axe_x_speed = 0.2
                 self.axe_x_gravity = 0

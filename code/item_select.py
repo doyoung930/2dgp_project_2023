@@ -11,7 +11,6 @@ class Item_Select:
         self.image.composite_draw(0, ' ', 650, 340, 390, 550)
         self.image.composite_draw(0, ' ', 1050, 340, 390, 550)
         self.image_up.composite_draw(0, ' ', 645, 660, 400, 60)
-        print('나 그림 그리는 중')
 
     def update(self):
         pass
