@@ -4,6 +4,7 @@ from pico2d import *
 import game_framework
 
 import game_world
+import item_mode
 from map import DungeonMap
 from character import PlayerCharacter
 from character_obj import BaseGauge
@@ -20,6 +21,8 @@ def handle_events():
             game_framework.quit()
         elif event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
             game_framework.quit()
+        elif event.type == SDL_KEYDOWN and event.key == SDLK_i:
+            game_framework.push_mode(item_mode)
         else:
             playercharacter.handle_event(event)
 

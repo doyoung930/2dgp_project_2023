@@ -1,7 +1,7 @@
 # 이것은 각 상태들을 객체로 구현한 것임.
 
 from pico2d import get_time, load_image, load_font, clamp, SDLK_UP, SDLK_DOWN, SDL_KEYDOWN, SDL_KEYUP, SDLK_SPACE, \
-    SDLK_LEFT, SDLK_RIGHT, \
+    SDLK_LEFT, SDLK_RIGHT, SDLK_i, \
     draw_rectangle
 import game_world
 import game_framework
@@ -50,6 +50,8 @@ def downkey_up(e):
 def space_down(e):
     return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_SPACE
 
+def item_mode(e):
+    return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_i
 
 def time_out(e):
     return e[0] == 'TIME_OUT'
