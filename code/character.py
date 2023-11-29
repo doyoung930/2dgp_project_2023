@@ -497,17 +497,14 @@ class PlayerCharacter:
         self.axe_dx_speed2 = 0.5
         self.axe_y_speed = 1
         self.axe_dy_speed = 0.5
-        self.axe_y_speed2 = 1
+        self.axe_y_speed2 = 1.2
         self.axe_dy_speed2 = 0.5
-        # self.axe_x_speed = 3
-        # self.axe_dx_speed = 3
-        # self.axe_x_speed2 = 5
-        # self.axe_dx_speed2 = 5
-        # self.axe_y_speed = 5
-        # self.axe_dy_speed = 5
         self.axe_x_gravity = 0.001
-        self.axe_y_gravity = 0.005
+        self.axe_x_gravity2 = 0.001
+        self.axe_y_gravity = 0.01
+        self.axe_y_gravity2 = 0.01
         self.axe_angle = 0
+        self.axe_angle2 = 0
         self.axe_x = self.x
         self.axe_y = self.y
         self.axe_pos = [
@@ -578,26 +575,49 @@ class PlayerCharacter:
             for i in range(0, self.axe_level):
                 if i == 0:
                     self.axe_pos[i] = (self.axe_pos[i][0] + self.axe_x_speed , self.axe_pos[i][1] + self.axe_y_speed)
-                    self.axe_image.composite_draw(self.axe_angle, ' ', self.axe_pos[i][0],
-                                                     self.axe_pos[i][1], 40, 40)
+                    self.axe_image.composite_draw(self.axe_angle2, ' ', self.axe_pos[i][0],
+                                                     self.axe_pos[i][1], 60, 60)
                 if i == 1:
                     self.axe_pos[i] = (self.axe_pos[i][0] - self.axe_x_speed, self.axe_pos[i][1] + self.axe_y_speed)
                     self.axe_image.composite_draw(self.axe_angle, 'h', self.axe_pos[i][0],
-                                                     self.axe_pos[i][1], 40, 40)
+                                                     self.axe_pos[i][1], 60, 60)
                 if i == 2:
-                    self.axe_pos[i] = (self.axe_pos[i][0] + self.axe_x_speed2, self.axe_pos[i][1])
-                    self.axe_image.composite_draw(self.axe_angle, '', self.axe_pos[i][0],
-                                                     self.axe_pos[i][1], 40, 40)
+                    self.axe_pos[i] = (self.axe_pos[i][0] + self.axe_x_speed2, self.axe_pos[i][1]+ self.axe_y_speed2)
+                    self.axe_image.composite_draw(self.axe_angle2, '', self.axe_pos[i][0],
+                                                     self.axe_pos[i][1], 60, 60)
                 if i == 3:
-                    self.axe_pos[i] = (self.axe_pos[i][0] - self.axe_x_speed2, self.axe_pos[i][1])
+                    self.axe_pos[i] = (self.axe_pos[i][0] - self.axe_x_speed2, self.axe_pos[i][1]+ self.axe_y_speed2)
                     self.axe_image.composite_draw(self.axe_angle, 'h', self.axe_pos[i][0],
-                                                     self.axe_pos[i][1], 40, 40)
-            if self.axe_x_speed <= 0.1:
-                self.axe_x_speed = 0.1
+                                                     self.axe_pos[i][1], 60, 60)
+            self.axe_angle+=0.01
+            self.axe_angle2-=0.01
+            if self.axe_x_speed <= 0.2:
+                self.axe_x_speed = 0.2
                 self.axe_x_gravity = 0
             else:
                 self.axe_x_speed -= self.axe_x_gravity
+
+            if self.axe_x_speed2 <= 0.3:
+                self.axe_x_speed2 = 0.3
+                self.axe_x_gravity2 = 0
+            else:
+                self.axe_x_speed2 -= self.axe_x_gravity2
+
             self.axe_y_speed -= self.axe_y_gravity
+            self.axe_y_speed2 -= self.axe_y_gravity2
+            if self.axe_pos[0][1] < -1000:
+                for i in range(0, self.axe_level):
+                    self.axe_pos[i] = (self.x, self.y)
+                    self.axe_x_speed = 0.3
+                    self.axe_x_speed2 = 0.5
+                    self.axe_y_speed = 1
+                    self.axe_y_speed2 = 1.2
+                    self.axe_x_gravity = 0.001
+                    self.axe_x_gravity2 = 0.001
+                    self.axe_y_gravity = 0.01
+                    self.axe_y_gravity2 = 0.01
+                    self.axe_angle = 0
+                    self.axe_angle2 = 0
 
     def Shoes(self):
         pass
