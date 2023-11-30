@@ -498,7 +498,7 @@ class PlayerCharacter:
         self.axe_dx_speed2 = 0.5
         self.axe_y_speed = 1
         self.axe_dy_speed = 0.5
-        self.axe_y_speed2 = 1.2
+        self.axe_y_speed2 = 1.5
         self.axe_dy_speed2 = 0.5
         self.axe_x_gravity = 0.001
         self.axe_x_gravity2 = 0.001
@@ -604,8 +604,8 @@ class PlayerCharacter:
             else:
                 self.axe_x_speed2 -= self.axe_x_gravity2
 
-            self.axe_y_speed -= self.axe_y_gravity
-            self.axe_y_speed2 -= self.axe_y_gravity2
+            self.axe_y_speed -= self.axe_y_gravity * 300 * game_framework.frame_time
+            self.axe_y_speed2 -= self.axe_y_gravity2 * 300 * game_framework.frame_time
             if self.axe_pos[0][1] < -1000:
                 for i in range(0, self.axe_level):
                     self.axe_pos[i] = (self.x, self.y)
