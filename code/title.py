@@ -1,7 +1,9 @@
+import pico2d
 import game_framework
 import game_world
+import play_mode
+
 from pico2d import load_image, delay, clear_canvas, update_canvas, get_events, get_time
-import pico2d
 
 
 def init():
@@ -18,6 +20,7 @@ def init():
     welly = Welly()
     screen = Screen()
     ch = Ch()
+    press = Press()
 
     game_world.add_object(title, 0)
     game_world.add_object(fire, 1)
@@ -26,6 +29,7 @@ def init():
     game_world.add_object(welly, 3)
     game_world.add_object(screen, 2)
     game_world.add_object(ch, 3)
+    game_world.add_object(press, 3)
 
 
 def finish():
@@ -51,7 +55,7 @@ def handle_events():
         elif event.type == pico2d.SDL_KEYDOWN:
             match event.key:
                 case pico2d.SDLK_SPACE:
-                    game_framework.quit()
+                    game_framework.change_mode(play_mode)
                 case pico2d.SDLK_ESCAPE:
                     game_framework.quit()
 
@@ -140,3 +144,14 @@ class Ch:
     def draw(self):
         #self.image.clip_composite_draw(0, 4354//5, 3050, 4354, 0, ' ', 640, 466, 90, 129)
         self.image.composite_draw(0, ' ', 640, 466, 90, 129)
+
+
+class Press:
+    def __init__(self):
+        self.image = load_image('./png/gui/Press.png')
+
+    def update(self):
+        pass
+
+    def draw(self):
+        self.image.composite_draw(0, ' ', 640, 100, 450, 50)
