@@ -1,7 +1,7 @@
 import pico2d
 import game_framework
 import game_world
-import play_mode
+import info_mode
 
 from pico2d import load_image, delay, clear_canvas, update_canvas, get_events, get_time
 
@@ -14,22 +14,23 @@ def init():
     running = True
 
     title = Title()
-    fire = Fire()
-    skull = Skull()
-    web = Web()
-    welly = Welly()
-    screen = Screen()
-    ch = Ch()
-    press = Press()
-
     game_world.add_object(title, 0)
-    game_world.add_object(fire, 1)
-    game_world.add_object(skull, 2)
-    game_world.add_object(web, 2)
-    game_world.add_object(welly, 3)
-    game_world.add_object(screen, 2)
-    game_world.add_object(ch, 3)
-    game_world.add_object(press, 3)
+
+    # fire = Fire()
+    # skull = Skull()
+    # web = Web()
+    # welly = Welly()
+    # screen = Screen()
+    # ch = Ch()
+    # press = Press()
+
+    # game_world.add_object(fire, 1)
+    # game_world.add_object(skull, 2)
+    # game_world.add_object(web, 2)
+    # game_world.add_object(welly, 3)
+    # game_world.add_object(screen, 2)
+    # game_world.add_object(ch, 3)
+    # game_world.add_object(press, 3)
 
 
 def finish():
@@ -55,7 +56,7 @@ def handle_events():
         elif event.type == pico2d.SDL_KEYDOWN:
             match event.key:
                 case pico2d.SDLK_SPACE:
-                    game_framework.change_mode(play_mode)
+                    game_framework.change_mode(info_mode)
                 case pico2d.SDLK_ESCAPE:
                     game_framework.quit()
 
@@ -70,14 +71,14 @@ def resume():
 
 class Title:
     def __init__(self):
-        self.image = load_image('./png/gui/lobby.png')
+        self.image = load_image('./png/gui/title.png')
 
 
     def update(self):
         pass
 
     def draw(self):
-        self.image.clip_composite_draw(0, 0, 4597, 2643, 0, ' ', 640, 360, 1300, 740)
+        self.image.clip_composite_draw(0, 0, 1056, 597, 0, ' ', 640, 360, 1280, 720)
 
 class Fire:
     def __init__(self):
