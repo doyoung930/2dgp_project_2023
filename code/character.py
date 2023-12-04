@@ -6,9 +6,9 @@ from pico2d import get_time, load_image, load_font, clamp, SDLK_UP, SDLK_DOWN, S
 import game_world
 import game_framework
 from map import DungeonMap
-from character_obj import Exp
-import skill
 
+import skill
+import server
 import math
 
 
@@ -111,8 +111,8 @@ class Idle:
     def draw(playercharacter):
         playercharacter.Shield()
         playercharacter.character_exp()
-        playercharacter.images['Idle'][int(playercharacter.frame)].composite_draw(0, ' ', playercharacter.x,
-                                                                                  playercharacter.y, 50, 50)
+        playercharacter.images['Idle'][int(playercharacter.frame)].composite_draw(0, ' ', playercharacter.sx,
+                                                                                  playercharacter.sy, 50, 50)
 
 
 
@@ -133,15 +133,15 @@ class RunRight:
     def do(playercharacter):
         playercharacter.frame = (playercharacter.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 3
         playercharacter.x += RUN_SPEED_PPS * game_framework.frame_time
-        playercharacter.x = clamp(25, playercharacter.x, 1280 - 25)
-        playercharacter.y = clamp(25, playercharacter.y, 720 - 25)
+        playercharacter.x = clamp(50, playercharacter.x, server.map.w - 50.0)
+        playercharacter.y = clamp(50, playercharacter.y, server.map.h - 50.0)
         pass
 
     @staticmethod
     def draw(playercharacter):
         playercharacter.Shield()
-        playercharacter.images['Walk'][int(playercharacter.frame)].composite_draw(0, ' ', playercharacter.x,
-                                                                                  playercharacter.y, 55, 55)
+        playercharacter.images['Walk'][int(playercharacter.frame)].composite_draw(0, ' ', playercharacter.sx,
+                                                                                  playercharacter.sy, 55, 55)
 
 
 class RunRightUp:
@@ -161,15 +161,15 @@ class RunRightUp:
         playercharacter.frame = (playercharacter.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 3
         playercharacter.x += RUN_SPEED_PPS * game_framework.frame_time
         playercharacter.y += RUN_SPEED_PPS * game_framework.frame_time
-        playercharacter.x = clamp(25, playercharacter.x, 1280 - 25)
-        playercharacter.y = clamp(25, playercharacter.y, 720 - 25)
+        playercharacter.x = clamp(50, playercharacter.x, server.map.w - 50.0)
+        playercharacter.y = clamp(50, playercharacter.y, server.map.h - 50.0)
         pass
 
     @staticmethod
     def draw(playercharacter):
         playercharacter.Shield()
-        playercharacter.images['Walk'][int(playercharacter.frame)].composite_draw(0, ' ', playercharacter.x,
-                                                                                  playercharacter.y, 55, 55)
+        playercharacter.images['Walk'][int(playercharacter.frame)].composite_draw(0, ' ', playercharacter.sx,
+                                                                                  playercharacter.sy, 55, 55)
 
 
 class RunRightDown:
@@ -190,15 +190,15 @@ class RunRightDown:
         playercharacter.frame = (playercharacter.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 3
         playercharacter.x += RUN_SPEED_PPS * game_framework.frame_time
         playercharacter.y -= RUN_SPEED_PPS * game_framework.frame_time
-        playercharacter.x = clamp(25, playercharacter.x, 1280 - 25)
-        playercharacter.y = clamp(25, playercharacter.y, 720 - 25)
+        playercharacter.x = clamp(50, playercharacter.x, server.map.w - 50.0)
+        playercharacter.y = clamp(50, playercharacter.y, server.map.h - 50.0)
         pass
 
     @staticmethod
     def draw(playercharacter):
         playercharacter.Shield()
-        playercharacter.images['Walk'][int(playercharacter.frame)].composite_draw(0, ' ', playercharacter.x,
-                                                                                  playercharacter.y, 55, 55)
+        playercharacter.images['Walk'][int(playercharacter.frame)].composite_draw(0, ' ', playercharacter.sx,
+                                                                                  playercharacter.sy, 55, 55)
 
 
 class RunLeft:
@@ -217,16 +217,16 @@ class RunLeft:
     def do(playercharacter):
         playercharacter.frame = (playercharacter.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 3
         playercharacter.x -= RUN_SPEED_PPS * game_framework.frame_time
-        playercharacter.x = clamp(25, playercharacter.x, 1280 - 25)
-        playercharacter.y = clamp(25, playercharacter.y, 720 - 25)
+        playercharacter.x = clamp(50, playercharacter.x, server.map.w - 50.0)
+        playercharacter.y = clamp(50, playercharacter.y, server.map.h - 50.0)
 
         pass
 
     @staticmethod
     def draw(playercharacter):
         playercharacter.Shield()
-        playercharacter.images['Walk'][int(playercharacter.frame)].composite_draw(0, 'h', playercharacter.x - 10,
-                                                                                  playercharacter.y, 55, 55)
+        playercharacter.images['Walk'][int(playercharacter.frame)].composite_draw(0, 'h', playercharacter.sx - 10,
+                                                                                  playercharacter.sy, 55, 55)
 
 class RunLeftUp:
     @staticmethod
@@ -245,14 +245,14 @@ class RunLeftUp:
         playercharacter.frame = (playercharacter.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 3
         playercharacter.x -= RUN_SPEED_PPS * game_framework.frame_time
         playercharacter.y += RUN_SPEED_PPS * game_framework.frame_time
-        playercharacter.x = clamp(25, playercharacter.x, 1280 - 25)
-        playercharacter.y = clamp(25, playercharacter.y, 720 - 25)
+        playercharacter.x = clamp(50, playercharacter.x, server.map.w - 50.0)
+        playercharacter.y = clamp(50, playercharacter.y, server.map.h - 50.0)
 
     @staticmethod
     def draw(playercharacter):
         playercharacter.Shield()
-        playercharacter.images['Walk'][int(playercharacter.frame)].composite_draw(0, 'h', playercharacter.x - 10,
-                                                                                  playercharacter.y, 55, 55)
+        playercharacter.images['Walk'][int(playercharacter.frame)].composite_draw(0, 'h', playercharacter.sx - 10,
+                                                                                  playercharacter.sy, 55, 55)
 class RunLeftDown:
     @staticmethod
     def enter(playercharacter, e):
@@ -271,14 +271,14 @@ class RunLeftDown:
         playercharacter.frame = (playercharacter.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 3
         playercharacter.x -= RUN_SPEED_PPS * game_framework.frame_time
         playercharacter.y -= RUN_SPEED_PPS * game_framework.frame_time
-        playercharacter.x = clamp(25, playercharacter.x, 1280 - 25)
-        playercharacter.y = clamp(25, playercharacter.y, 720 - 25)
+        playercharacter.x = clamp(50, playercharacter.x, server.map.w - 50.0)
+        playercharacter.y = clamp(50, playercharacter.y, server.map.h - 50.0)
 
     @staticmethod
     def draw(playercharacter):
         playercharacter.Shield()
-        playercharacter.images['Walk'][int(playercharacter.frame)].composite_draw(0, 'h', playercharacter.x - 10,
-                                                                                  playercharacter.y, 55, 55)
+        playercharacter.images['Walk'][int(playercharacter.frame)].composite_draw(0, 'h', playercharacter.sx - 10,
+                                                                                  playercharacter.sy, 55, 55)
 class RunUp:
     @staticmethod
     def enter(playercharacter, e):
@@ -299,15 +299,15 @@ class RunUp:
     def do(playercharacter):
         playercharacter.frame = (playercharacter.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 3
         playercharacter.y += RUN_SPEED_PPS * game_framework.frame_time
-        playercharacter.x = clamp(25, playercharacter.x, 1280 - 25)
-        playercharacter.y = clamp(25, playercharacter.y, 720 - 25)
+        playercharacter.x = clamp(50, playercharacter.x, server.map.w - 50.0)
+        playercharacter.y = clamp(50, playercharacter.y, server.map.h - 50.0)
         pass
 
     @staticmethod
     def draw(playercharacter):
         playercharacter.Shield()
-        playercharacter.images['Walk'][int(playercharacter.frame)].composite_draw(0, 'h', playercharacter.x - 10,
-                                                                                  playercharacter.y, 55, 55)
+        playercharacter.images['Walk'][int(playercharacter.frame)].composite_draw(0, 'h', playercharacter.sx - 10,
+                                                                                  playercharacter.sy, 55, 55)
 class RunDown:
     @staticmethod
     def enter(playercharacter, e):
@@ -328,15 +328,15 @@ class RunDown:
     def do(playercharacter):
         playercharacter.frame = (playercharacter.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 3
         playercharacter.y -= RUN_SPEED_PPS * game_framework.frame_time
-        playercharacter.x = clamp(25, playercharacter.x, 1280 - 25)
-        playercharacter.y = clamp(25, playercharacter.y, 720 - 25)
+        playercharacter.x = clamp(50, playercharacter.x, server.map.w - 50.0)
+        playercharacter.y = clamp(50, playercharacter.y, server.map.h - 50.0)
         pass
 
     @staticmethod
     def draw(playercharacter):
         playercharacter.Shield()
-        playercharacter.images['Walk'][int(playercharacter.frame)].composite_draw(0, ' ', playercharacter.x,
-                                                                                  playercharacter.y, 55, 55)
+        playercharacter.images['Walk'][int(playercharacter.frame)].composite_draw(0, ' ', playercharacter.sx,
+                                                                                  playercharacter.sy, 55, 55)
 
 
 class Attack:
@@ -429,11 +429,9 @@ class PlayerCharacter:
 
     def __init__(self):
 
-        global dungeon_map
-        dungeon_map = DungeonMap()
-        self.x, self.y = 1280 / 2, 720 / 2
-        self.camera_x = self.x - (1280 - 50) // 2
-        self.camera_y = self.y - (1280 - 50) // 2
+        self.x, self.y = 1580, 2000
+        self.sx = 1580
+        self.sy = 2000
         
         self.frame = 0  # 캐릭터 프레임
         self.action = 3  # 2 left 3 right
@@ -441,7 +439,6 @@ class PlayerCharacter:
         self.dir = 0  # 좌우 방향
         self.dir2 = 0  # 위아래 방향
         self.load_images()  # 캐릭터 이미지 모음
-        self.HP_image = load_image('./png/gui/hp_gauge2.png')
         self.state_machine = StateMachine(self)
         self.state_machine.start()
         self.player_width = 50  # 플레이어 크기 width
@@ -452,41 +449,37 @@ class PlayerCharacter:
 
         self.player_speed = 1
 
-        self.exp = 0        # 플레이어 경험치
-        self.max_exp = 1000
 
-        self.hp = 100
-        self.max_hp = 100
 
         # shield1
         self.shield_image = load_image("./png/weapon/shield-05.png")
         self.Shield_level = 1
         self.shield_angle = 0
         self.shield_radius = 100
-        self.shield_x = self.x
-        self.shield_y = self.y + 100 * math.sin(math.radians(self.shield_angle))
+        self.shield_x = self.sx
+        self.shield_y = self.sy + 100 * math.sin(math.radians(self.shield_angle))
         # sword1
         #self.shield_image = load_image("./png/weapon/shield-05.png")
         self.sword1_level = 1
-        self.sword1_x = self.x
-        self.sword1_y = self.y
+        self.sword1_x = self.sx
+        self.sword1_y = self.sy
 
         # sword2
         self.sword2_image = load_image("./png/weapon/Sword-2-05.png")
         self.sword2_level = 1
         self.sword2_speed = 3
         self.sword2_angle = 0
-        self.sword2_x = self.x
-        self.sword2_y = self.y
+        self.sword2_x = self.sx
+        self.sword2_y = self.sy
         self.sword2_pos =[
-            (self.x, self.y),
-            (self.x, self.y),
-            (self.x, self.y),
-            (self.x, self.y),
-            (self.x, self.y),
-            (self.x, self.y),
-            (self.x, self.y),
-            (self.x, self.y),
+            (self.sx, self.sy),
+            (self.sx, self.sy),
+            (self.sx, self.sy),
+            (self.sx, self.sy),
+            (self.sx, self.sy),
+            (self.sx, self.sy),
+            (self.sx, self.sy),
+            (self.sx, self.sy),
         ]
 
         # axe
@@ -506,18 +499,31 @@ class PlayerCharacter:
         self.axe_y_gravity2 = 0.01
         self.axe_angle = 0
         self.axe_angle2 = 0
-        self.axe_x = self.x
-        self.axe_y = self.y
+        self.axe_x = self.sx
+        self.axe_y = self.sy
         self.axe_pos = [
-            (self.x, self.y),
-            (self.x, self.y),
-            (self.x, self.y),
-            (self.x, self.y)
+            (self.sx, self.sy),
+            (self.sx, self.sy),
+            (self.sx, self.sy),
+            (self.sx, self.sy)
         ]
 
+        #base
+        self.exp_w_image = load_image('./png/gui/exp_w.png')
+        self.base_image = load_image('./png/gui/base_gauge2.png')
+
+        #hp
+        self.HP_image = load_image('./png/gui/hp_gauge2.png')
+        self.hp = 100
+        self.max_hp = 100
+
+        # exp
+        self.EXP_image = load_image('./png/gui/exp_gauge2.png')
+        self.exp = 0  # 플레이어 경험치
+        self.max_exp = 1000
+
     def character_exp(self):
-        exp = Exp(self.exp)
-        game_world.add_object(exp)
+        pass
 
     def Shield(self):
         if self.Shield_level > 0:
@@ -528,12 +534,12 @@ class PlayerCharacter:
                 # 각도가 360도를 넘어가면 360도로 초기화
                 if self.shield_angle+(360/i) >= 360:
                     self.shield_angle -= 360
-                self.shield_x = self.x + 100 * math.cos(math.radians(self.shield_angle+(360/self.Shield_level)*i))
-                self.shield_y = self.y + 100 * math.sin(math.radians(self.shield_angle+(360/self.Shield_level)*i))
+                self.shield_x = self.sx + 100 * math.cos(math.radians(self.shield_angle+(360/self.Shield_level)*i))
+                self.shield_y = self.sy + 100 * math.sin(math.radians(self.shield_angle+(360/self.Shield_level)*i))
                 self.shield_image.composite_draw(0, ' ', self.shield_x, self.shield_y, 40, 40)
 
     def Sword1(self):
-        sword1 = skill.Sword1(self.x, self.y, self.dir * 10, self.face_dir, self.dir2 * 10)
+        sword1 = skill.Sword1(self.sx, self.sy, self.dir * 10, self.face_dir, self.dir2 * 10)
         game_world.add_object(sword1)
 
     def Sword2(self):
@@ -566,28 +572,33 @@ class PlayerCharacter:
                 if i == 7:
                     self.sword2_pos[i] = (self.sword2_pos[i][0] - self.sword2_speed * 300 * game_framework.frame_time, self.sword2_pos[i][1] - self.sword2_speed* 300 * game_framework.frame_time)
                     self.sword2_image.composite_draw(self.sword2_angle, 'h', self.sword2_pos[i][0], self.sword2_pos[i][1], 40, 40)
-            if self.sword2_pos[0][0] > 4000:
+            if self.sword2_pos[0][0] > self.sx + 4000:
                 for i in range(0, self.sword2_level):
-                    self.sword2_pos[i] = (self.x, self.y)
+                    self.sword2_pos[i] = (self.sx, self.sy)
 
 
     def Axe(self):
         if self.axe_level > 0:
             for i in range(0, self.axe_level):
                 if i == 0:
-                    self.axe_pos[i] = (self.axe_pos[i][0] + self.axe_x_speed * 300 * game_framework.frame_time , self.axe_pos[i][1] + self.axe_y_speed* 300 * game_framework.frame_time)
+                    self.axe_pos[i] = (self.axe_pos[i][0] + self.axe_x_speed * 300 * game_framework.frame_time ,
+                                       self.axe_pos[i][1] + self.axe_y_speed* 300 * game_framework.frame_time)
                     self.axe_image.composite_draw(self.axe_angle2, ' ', self.axe_pos[i][0],
                                                      self.axe_pos[i][1], 60, 60)
                 if i == 1:
-                    self.axe_pos[i] = (self.axe_pos[i][0] - self.axe_x_speed* 300 * game_framework.frame_time, self.axe_pos[i][1] + self.axe_y_speed* 300 * game_framework.frame_time)
+                    self.axe_pos[i] = (self.axe_pos[i][0] - self.axe_x_speed* 300 * game_framework.frame_time,
+                                       self.axe_pos[i][1] + self.axe_y_speed* 300 * game_framework.frame_time)
                     self.axe_image.composite_draw(self.axe_angle, 'h', self.axe_pos[i][0],
                                                      self.axe_pos[i][1], 60, 60)
                 if i == 2:
-                    self.axe_pos[i] = (self.axe_pos[i][0] + self.axe_x_speed2* 300 * game_framework.frame_time, self.axe_pos[i][1]+ self.axe_y_speed2* 300 * game_framework.frame_time)
+                    self.axe_pos[i] = (self.axe_pos[i][0] + self.axe_x_speed2* 300 * game_framework.frame_time,
+
+                                       self.axe_pos[i][1]+ self.axe_y_speed2* 300 * game_framework.frame_time)
                     self.axe_image.composite_draw(self.axe_angle2, '', self.axe_pos[i][0],
                                                      self.axe_pos[i][1], 60, 60)
                 if i == 3:
-                    self.axe_pos[i] = (self.axe_pos[i][0] - self.axe_x_speed2 * 300 * game_framework.frame_time, self.axe_pos[i][1]+ self.axe_y_speed2* 300 * game_framework.frame_time)
+                    self.axe_pos[i] = (self.axe_pos[i][0] - self.axe_x_speed2 * 300 * game_framework.frame_time,
+                                       self.axe_pos[i][1]+ self.axe_y_speed2* 300 * game_framework.frame_time)
                     self.axe_image.composite_draw(self.axe_angle, 'h', self.axe_pos[i][0],
                                                      self.axe_pos[i][1], 60, 60)
             self.axe_angle+=0.01  * 300 * game_framework.frame_time
@@ -606,9 +617,9 @@ class PlayerCharacter:
 
             self.axe_y_speed -= self.axe_y_gravity * 300 * game_framework.frame_time
             self.axe_y_speed2 -= self.axe_y_gravity2 * 300 * game_framework.frame_time
-            if self.axe_pos[0][1] < -1000:
+            if self.axe_pos[0][1] < self.sy -1000:
                 for i in range(0, self.axe_level):
-                    self.axe_pos[i] = (self.x, self.y)
+                    self.axe_pos[i] = (self.sx, self.sy)
                     self.axe_x_speed = 0.3
                     self.axe_x_speed2 = 0.5
                     self.axe_y_speed = 1
@@ -620,6 +631,17 @@ class PlayerCharacter:
                     self.axe_angle = 0
                     self.axe_angle2 = 0
 
+    def base_g(self):
+        self.exp_w_image.composite_draw(0, ' ', server.map.cw - 1250, server.map.ch - 710, 60, 17)
+        self.base_image.composite_draw(0 , ' ', server.map.cw - 610, server.map.ch-710, 1220, 15)
+
+    def EXP(self):
+        self.e_exp = self.exp / 1000 * 1220
+        #self.EXP_image.composite_draw(0, ' ', server.map.cw - 610, server.map.ch-710, 1220, 15)
+        self.EXP_image.composite_draw(0, ' ', server.map.cw - 1220 + 610 * self.exp/1000 , server.map.ch-710, self.e_exp , 15)
+
+
+
     def Shoes(self):
         pass
 
@@ -628,15 +650,19 @@ class PlayerCharacter:
 
     def update(self):
         self.state_machine.update()
-
-
+        self.x = clamp(50.0, self.x, server.map.w - 50.0)
+        self.y = clamp(50.0, self.y, server.map.h - 50.0)
+        self.sx = self.x - server.map.window_left
+        self.sy = self.y - server.map.window_bottom
 
     def handle_event(self, event):
         self.state_machine.handle_event(('INPUT', event))
 
     def draw(self):
         self.state_machine.draw()
-        self.HP_image.composite_draw(0, ' ', self.x-10, self.y+30, self.hp/2, 5)
+        self.HP_image.composite_draw(0, ' ', self.sx-10, self.sy+30, self.hp/2, 5)
         self.Shield()
         self.Sword2()
         self.Axe()
+        self.base_g()
+        self.EXP()

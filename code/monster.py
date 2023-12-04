@@ -6,6 +6,7 @@ import game_framework
 import game_world
 #from behavior_tree import BehaviorTree, Action, Sequence, Condition, Selector
 
+import server
 
 # zombie Run Speed
 PIXEL_PER_METER = (10.0 / 0.3)  # 10 pixel 30 cm

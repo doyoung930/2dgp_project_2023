@@ -7,12 +7,12 @@ import game_world
 import item_mode
 from map import DungeonMap
 from character import PlayerCharacter
-from character_obj import BaseGauge
 import skill
 
 #from ball import Ball
 #from zombie import Zombie
 
+import server
 
 def handle_events():
     events = get_events()
@@ -24,22 +24,20 @@ def handle_events():
         elif event.type == SDL_KEYDOWN and event.key == SDLK_i:
             game_framework.push_mode(item_mode)
         else:
-            playercharacter.handle_event(event)
+            server.character.handle_event(event)
 
 def init():
-    global dungeon_map
-    global playercharacter
 
     running = True
 
-    dungeon_map = DungeonMap()
-    game_world.add_object(dungeon_map, 0)
+    server.map = DungeonMap()
+    game_world.add_object(server.map, 0)
 
-    basegauge = BaseGauge()
-    game_world.add_object(basegauge, 0)
+    # basegauge = BaseGauge()
+    # game_world.add_object(basegauge, 0)
 
-    playercharacter = PlayerCharacter()
-    game_world.add_object(playercharacter, 2)
+    server.character = PlayerCharacter()
+    game_world.add_object(server.character, 2)
 
 
 def finish():
