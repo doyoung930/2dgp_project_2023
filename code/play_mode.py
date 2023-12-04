@@ -8,6 +8,8 @@ import item_mode
 from map import DungeonMap
 from character import PlayerCharacter
 import skill
+from monster import *
+
 
 #from ball import Ball
 #from zombie import Zombie
@@ -33,12 +35,14 @@ def init():
     server.map = DungeonMap()
     game_world.add_object(server.map, 0)
 
-    # basegauge = BaseGauge()
-    # game_world.add_object(basegauge, 0)
 
     server.character = PlayerCharacter()
     game_world.add_object(server.character, 2)
 
+    for _ in range(20):
+        m1 = M1()
+        game_world.add_object(m1)
+        game_world.add_collision_pair('zombie:ball', m1, None)
 
 def finish():
     game_world.clear()
