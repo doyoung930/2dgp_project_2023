@@ -666,3 +666,15 @@ class PlayerCharacter:
         self.Axe()
         self.base_g()
         self.EXP()
+        
+    def get_bb(self):
+        return self.x - 20, self.y - 50, self.x + 20, self.y + 50
+
+    # fill here
+    def handle_collision(self, group, other):
+        match group:
+            case 'zombie:hit':
+                pass
+                #Ball.zombie_eat_sound.play()
+                #game_world.remove_object(self)
+        pass

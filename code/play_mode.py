@@ -42,7 +42,7 @@ def init():
     for _ in range(20):
         m1 = M1()
         game_world.add_object(m1)
-        game_world.add_collision_pair('zombie:ball', m1, None)
+        game_world.add_collision_pair('zombie:hit', m1, None)
 
 def finish():
     game_world.clear()
