@@ -3,7 +3,7 @@ import game_world
 from pico2d import load_image, delay, clear_canvas, update_canvas, get_events, get_time
 import pico2d
 
-from Item_Select import Item_Select
+from item_select import Item_Select
 
 def init():
     global item_select
