@@ -1,8 +1,11 @@
+from pico2d import *
+
 import random
 import math
 import game_framework
+import game_world
+#from behavior_tree import BehaviorTree, Action, Sequence, Condition, Selector
 
-from pico2d import *
 
 # zombie Run Speed
 PIXEL_PER_METER = (10.0 / 0.3)  # 10 pixel 30 cm
