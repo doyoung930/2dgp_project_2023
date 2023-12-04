@@ -61,14 +61,15 @@ class M1:
 
     def update(self):
         self.frame = (self.frame + FRAMES_PER_M1_ACTION * ACTION_PER_TIME * game_framework.frame_time) % FRAMES_PER_M1_ACTION
+        self.tx, self.ty = server.character.x, server.character.y
         self.bt.run()
 
     def draw(self):
         sx, sy = self.x - server.map.window_left, self.y - server.map.window_bottom
         if math.cos(self.dir) < 0:
-            M1.images[self.state][int(self.frame)].composite_draw(0, 'h', sx, sy, 100 * self.size, 100 * self.size)
-        else:
             M1.images[self.state][int(self.frame)].draw(sx, sy, 100 * self.size, 100 * self.size)
+        else:
+            M1.images[self.state][int(self.frame)].composite_draw(0, 'h', sx, sy, 100 * self.size, 100 * self.size)
 
         x1, y1, x2, y2 = self.get_bb()
         draw_rectangle(x1 - server.map.window_left, y1 - server.map.window_bottom,
@@ -80,10 +81,8 @@ class M1:
     def handle_collision(self, group, other):
         pass
 
-    def set_target_location(self, x=None, y=None):
-        if not x or not y:
-            raise ValueError('Location should be given')
-        self.tx, self.ty = server.character.sx, server.character.sy
+    def set_target_location(self):
+        self.tx, self.ty = server.character.x, server.character.y
         return BehaviorTree.SUCCESS
 
     def distance_less_than(self, x1, y1, x2, y2, r):
@@ -104,16 +103,31 @@ class M1:
         else:
             return BehaviorTree.RUNNING
 
+    def is_boy_nearby(self, r):
+        if self.distance_less_than(server.character.sx, server.character.sy, self.x, self.y, r):
+            return BehaviorTree.SUCCESS
+        else:
+            return BehaviorTree.FAIL
+    def move_to_character(self, r=0.5):
+        self.state = 'Walk'
+        self.move_slightly_to(server.character.sx, server.character.sy)
+        if self.distance_less_than(server.character.boy.sx, server.character.boy.sy, self.x, self.y, r):
+            return BehaviorTree.SUCCESS
+        else:
+            return BehaviorTree.RUNNING
     def set_random_location(self):
         # select random location around boy
-        self.tx = random.randint(int(server.character.x) - 600, int(server.character.x) + 600)
-        self.ty = random.randint(int(server.character.y) - 400, int(server.character.y) + 400)
+        #self.tx = random.randint(int(server.character.x) - 600, int(server.character.x) + 600)
+        #self.ty = random.randint(int(server.character.y) - 400, int(server.character.y) + 400)
         return BehaviorTree.SUCCESS
 
     def build_behavior_tree(self):
-        a1 = Action('Set random location', self.set_random_location)
+        #a1 = Action('Set random location', self.set_random_location)
+        a1 = Action('Set target location', self.set_target_location)
+        #c1 = Condition('소년이 근처에 있는가?', self.is_boy_nearby, 7)
         a2 = Action('Move to', self.move_to)
         root = SEQ_wander = Sequence('Wander', a1, a2)
+        #root = SEQ_chase_ch = Sequence('Wander', c1, a2)
         self.bt = BehaviorTree(root)
 
 
