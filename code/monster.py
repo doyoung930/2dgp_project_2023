@@ -53,6 +53,7 @@ class M1:
         self.frame = random.randint(0, 19)
         self.state = 'Walk'
 
+        self.i_state = 'Idle'
         self.tx, self.ty = 0, 0
         self.build_behavior_tree()
 
@@ -60,7 +61,12 @@ class M1:
         self.hp = 1
 
     def get_bb(self):
-        return self.x - 50 * self.size, self.y - 50 * self.size, self.x + 50 * self.size, self.y + 50 * self.size
+        return (
+            self.x - 50 * self.size - server.map.window_left,
+            self.y - 50 * self.size - server.map.window_bottom,
+            self.x + 50 * self.size - server.map.window_left,
+            self.y + 50 * self.size - server.map.window_bottom
+        )
 
     def update(self):
         self.frame = (self.frame + FRAMES_PER_M1_ACTION * ACTION_PER_TIME * game_framework.frame_time) % FRAMES_PER_M1_ACTION
@@ -73,10 +79,10 @@ class M1:
             M1.images[self.state][int(self.frame)].draw(sx, sy, 100 * self.size, 100 * self.size)
         else:
             M1.images[self.state][int(self.frame)].composite_draw(0, 'h', sx, sy, 100 * self.size, 100 * self.size)
-
-        x1, y1, x2, y2 = self.get_bb()
-        draw_rectangle(x1 - server.map.window_left, y1 - server.map.window_bottom,
-                       x2 - server.map.window_left, y2 - server.map.window_bottom)
+        draw_rectangle(*self.get_bb())
+        #x1, y1, x2, y2 = self.get_bb()
+        #draw_rectangle(x1 - server.map.window_left, y1 - server.map.window_bottom,
+        #               x2 - server.map.window_left, y2 - server.map.window_bottom)
 
     def handle_event(self, event):
         pass
@@ -86,7 +92,7 @@ class M1:
             case 'M1:sword1':
                 self.hp -= 1
                 print('충돌 했어')
-                if self.hp == 0:
+                if self.hp < 0:
                     game_world.remove_object(self)
 
     def set_target_location(self):

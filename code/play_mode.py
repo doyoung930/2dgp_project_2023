@@ -39,7 +39,7 @@ def init():
 
     server.character = PlayerCharacter()
     game_world.add_object(server.character, 2)
-    game_world.add_collision_pair('character:hit', server.character, None)
+    game_world.add_collision_pair('character:M1', server.character, None)
 
 
     #game_world.add_collision_pair('zombie:ball', zombie, None)
@@ -47,10 +47,20 @@ def init():
         m1 = M1()
         sword1 = skill.Sword1()
         game_world.add_object(m1)
-        game_world.add_collision_pair('character:hit',  server.character, m1)
+        game_world.add_collision_pair('M1:sword1',  m1, None)
+        game_world.add_collision_pair('M1:sword2',  m1, None)
+        game_world.add_collision_pair('M1:axe',  m1, None)
+        game_world.add_collision_pair('M1:shield',  m1, None)
+        #game_world.add_collision_pair('M1:sword1',  m1, None)
+
+    sword1 = Sword1()
+    game_world.add_collision_pair('M1:sword1', None, sword1)
+
+    sword2 = server.character.Sword2()
+    game_world.add_collision_pair('M1:sword2', None, sword2)
 
 
-        # game_world.add_collision_pair('M1:sword1', None, server.character.Sword1())
+    # game_world.add_collision_pair('M1:sword1', None, server.character.Sword1())
 
 def finish():
     game_world.clear()

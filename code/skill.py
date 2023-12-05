@@ -1,6 +1,7 @@
 from pico2d import *
 import game_world
 import game_framework
+import server
 import monster
 
 import math
@@ -9,7 +10,7 @@ import math
 class Sword1:
     image = None
 
-    def __init__(self, x=400, y=300, velocity=10, dir = 0, velocity2 = 10):
+    def __init__(self, x=100000, y=100000, velocity=10, dir = 0, velocity2 = 10):
         if Sword1.image == None:
             Sword1.image = load_image("./png/weapon/Sword-02.png")
         self.x, self.y, self.velocity, self.velocity2 = x, y, velocity, -velocity2
@@ -60,15 +61,23 @@ class Sword1:
             self.y -= 10 * 100 * game_framework.frame_time
         #print(self.velocity * 100 * game_framework.frame_time)
 
-        if self.x < 25 - self.x or self.x > self.x + 1600 - 25:
+        if self.x < 50 + server.character.sx - 600:
             game_world.remove_object(self)
-        if self.y < 25 - self.y or self.y > self.y + 720 - 25:
+        if self.x > server.character.sx + 600 - 50:
+            game_world.remove_object(self)
+        if self.y < 50 + server.character.sy -360 :
+            game_world.remove_object(self)
+        if self.y > server.character.sy + 360 - 50:
             game_world.remove_object(self)
 
+        #self.handle_collision(self, monster.M1)
+        #print(self.y, 25 + server.character.sy -360 )
+        #print(self.get_bb())
 
     def handle_collision(self, group, other):
         match group:
             case 'M1:sword1':
+                print("충돌했네")
                 game_world.remove_object(self)
 
     def get_bb(self):

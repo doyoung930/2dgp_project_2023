@@ -44,11 +44,17 @@ def clear():
 def collide(a, b):
     left_a, bottom_a, right_a, top_a = a.get_bb()
     left_b, bottom_b, right_b, top_b = b.get_bb()
+    #print(a.get_bb())
+    #print(b.get_bb())
 
-    if left_a > right_b: return False
-    if right_a < left_b: return False
-    if top_a < bottom_b: return False
-    if bottom_a > top_b: return False
+    if left_a > right_b:
+        return False
+    if right_a < left_b:
+        return False
+    if top_a < bottom_b:
+        return False
+    if bottom_a > top_b:
+        return False
 
     return True
 
@@ -63,17 +69,24 @@ def add_collision_pair(group, a, b):
         collision_pairs[group][1].append(b)
 
 
+# def handle_collisions():
+#     collided_pairs = []
+#     for group, pairs in collision_pairs.items():
+#         print(group, pairs)
+#         for a in pairs[0]:
+#             for b in pairs[1]:
+#                 if collide(a, b):
+#                     collided_pairs.append((group, a, b))
+#     for group, a, b in collided_pairs:
+#         a.handle_collision(group, b)
+#         b.handle_collision(group, a)
 def handle_collisions():
-    collided_pairs = []
     for group, pairs in collision_pairs.items():
         for a in pairs[0]:
             for b in pairs[1]:
                 if collide(a, b):
-                    collided_pairs.append((group, a, b))
-    for group, a, b in collided_pairs:
-        a.handle_collision(group, b)
-        b.handle_collision(group, a)
-
+                    a.handle_collision(group, b)
+                    b.handle_collision(group, a)
 
 def all_objects():
     for layer in objects:
