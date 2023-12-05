@@ -17,6 +17,7 @@ class Sword1:
         self.image_w = 40
         self.image_h = 40
         self.dir = dir
+
     def draw(self):
         # /1 right 2 3 /4 left /5 6 /7 up /8 down
         if self.dir == 7:
@@ -59,7 +60,6 @@ class Sword1:
         elif self.dir == 6: ##RunLeftDown
             self.x -= 10 * 100 * game_framework.frame_time
             self.y -= 10 * 100 * game_framework.frame_time
-        #print(self.velocity * 100 * game_framework.frame_time)
 
         if self.x < 50 + server.character.sx - 600:
             game_world.remove_object(self)
@@ -70,14 +70,10 @@ class Sword1:
         if self.y > server.character.sy + 360 - 50:
             game_world.remove_object(self)
 
-        #self.handle_collision(self, monster.M1)
-        #print(self.y, 25 + server.character.sy -360 )
-        #print(self.get_bb())
 
     def handle_collision(self, group, other):
         match group:
             case 'M1:sword1':
-                print("충돌했네")
                 game_world.remove_object(self)
 
     def get_bb(self):

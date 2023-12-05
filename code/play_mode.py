@@ -43,7 +43,7 @@ def init():
 
 
     #game_world.add_collision_pair('zombie:ball', zombie, None)
-    for _ in range(20):
+    for _ in range(100):
         m1 = M1()
         sword1 = skill.Sword1()
         game_world.add_object(m1)

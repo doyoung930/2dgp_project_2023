@@ -7,6 +7,7 @@ import game_world
 from behavior_tree import BehaviorTree, Action, Sequence, Condition, Selector
 
 import server
+import skill
 
 # zombie Run Speed
 PIXEL_PER_METER = (10.0 / 0.3)  # 10 pixel 30 cm
@@ -80,9 +81,6 @@ class M1:
         else:
             M1.images[self.state][int(self.frame)].composite_draw(0, 'h', sx, sy, 100 * self.size, 100 * self.size)
         draw_rectangle(*self.get_bb())
-        #x1, y1, x2, y2 = self.get_bb()
-        #draw_rectangle(x1 - server.map.window_left, y1 - server.map.window_bottom,
-        #               x2 - server.map.window_left, y2 - server.map.window_bottom)
 
     def handle_event(self, event):
         pass
@@ -90,10 +88,45 @@ class M1:
     def handle_collision(self, group, other):
         match group:
             case 'M1:sword1':
-                self.hp -= 1
-                print('충돌 했어')
-                if self.hp < 0:
+                self.hp -= server.character.sword1_level
+                if self.hp <= 0:
                     game_world.remove_object(self)
+                    server.character.exp += 100 / server.character.next_level
+                    if server.character.exp >= 1000:
+                        server.character.exp -= 1000
+                        server.character.level += 1
+                        server.character.next_level += 1
+
+            case 'M1:sword2':
+                self.hp -= 1
+                if self.hp <= 0:
+                    game_world.remove_object(self)
+                    server.character.exp += 100 / server.character.next_level
+                    if server.character.exp >= 1000:
+                        server.character.exp -= 1000
+                        server.character.level += 1
+                        server.character.next_level += 1
+
+            case 'M1:shield':
+                self.hp -= 1
+                if self.hp <= 0:
+                    game_world.remove_object(self)
+                    server.character.exp += 100 / server.character.next_level
+                    if server.character.exp >= 1000:
+                        server.character.exp -= 1000
+                        server.character.level += 1
+                        server.character.next_level += 1
+                        
+            case 'M1:axe':
+                self.hp -= 1
+                if self.hp <= 0:
+                    game_world.remove_object(self)
+                    server.character.exp += 100 / server.character.next_level
+                    if server.character.exp >= 1000:
+                        server.character.exp -= 1000
+                        server.character.level += 1
+                        server.character.next_level += 1
+
 
     def set_target_location(self):
         self.tx, self.ty = server.character.x, server.character.y

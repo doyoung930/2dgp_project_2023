@@ -450,7 +450,6 @@ class PlayerCharacter:
         self.player_speed = 1
 
 
-
         # shield1
         self.shield_image = load_image("./png/weapon/shield-05.png")
         self.Shield_level = 1
@@ -540,9 +539,10 @@ class PlayerCharacter:
 
     def Sword1(self):
         global sword1
-        sword1 = skill.Sword1(self.sx, self.sy, self.dir * 10, self.face_dir, self.dir2 * 10)
-        game_world.add_object(sword1)
-        game_world.add_collision_pair('M1:sword1', None, sword1)
+        if self.sword1_level > 0:
+            sword1 = skill.Sword1(self.sx, self.sy, self.dir * 10, self.face_dir, self.dir2 * 10)
+            game_world.add_object(sword1)
+            game_world.add_collision_pair('M1:sword1', None, sword1)
 
     def Sword2(self):
         # 리스트를 이용해 칼 총 8개를 관리 해야함.
