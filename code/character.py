@@ -536,6 +536,7 @@ class PlayerCharacter:
                 self.shield_x = self.sx + 100 * math.cos(math.radians(self.shield_angle+(360/self.Shield_level)*i))
                 self.shield_y = self.sy + 100 * math.sin(math.radians(self.shield_angle+(360/self.Shield_level)*i))
                 self.shield_image.composite_draw(0, ' ', self.shield_x, self.shield_y, 40, 40)
+                draw_rectangle(*self.get_bb_shield())
 
     def Sword1(self):
         global sword1
@@ -574,6 +575,7 @@ class PlayerCharacter:
                 if i == 7:
                     self.sword2_pos[i] = (self.sword2_pos[i][0] - self.sword2_speed * 300 * game_framework.frame_time, self.sword2_pos[i][1] - self.sword2_speed* 300 * game_framework.frame_time)
                     self.sword2_image.composite_draw(self.sword2_angle, 'h', self.sword2_pos[i][0], self.sword2_pos[i][1], 40, 40)
+                draw_rectangle(*self.get_bb_sword2(i))
             if self.sword2_pos[0][0] > self.sx + 4000:
                 for i in range(0, self.sword2_level):
                     self.sword2_pos[i] = (self.sx, self.sy)
@@ -602,6 +604,8 @@ class PlayerCharacter:
                                        self.axe_pos[i][1]+ self.axe_y_speed2* 300 * game_framework.frame_time)
                     self.axe_image.composite_draw(self.axe_angle, 'h', self.axe_pos[i][0],
                                                      self.axe_pos[i][1], 60, 60)
+                draw_rectangle(*self.get_bb_axe(i))
+
             self.axe_angle+=0.01  * 300 * game_framework.frame_time
             self.axe_angle2-=0.01  * 300 * game_framework.frame_time
             if self.axe_x_speed <= 0.2:
@@ -670,6 +674,17 @@ class PlayerCharacter:
         
     def get_bb(self):
         return self.sx-25, self.sy-25, self.sx+15 , self.sy+25
+
+    def get_bb_shield(self):
+        return self.shield_x-20, self.shield_y-20, self.shield_x+20 , self.shield_y+20
+
+    def get_bb_sword2(self, i):
+        return self.sword2_pos[i][0] - 20, self.sword2_pos[i][1] - 20, self.sword2_pos[i][0] + 20 , self.sword2_pos[i][1] +20
+
+
+    def get_bb_axe(self, i):
+        return self.axe_pos[i][0]-20, self.axe_pos[i][1]-20, self.axe_pos[i][0]+20 , self.axe_pos[i][1]+20
+
 
     # fill here
     def handle_collision(self, group, other):

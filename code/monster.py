@@ -116,7 +116,7 @@ class M1:
                         server.character.exp -= 1000
                         server.character.level += 1
                         server.character.next_level += 1
-                        
+
             case 'M1:axe':
                 self.hp -= 1
                 if self.hp <= 0:
