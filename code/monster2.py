@@ -47,7 +47,7 @@ class M1:
 
         self.x = random.randint(100, server.map.w - 100)
         self.y = random.randint(100, server.map.h - 100)
-        self.size = clamp(0.7, random.random() * 2, 1.0)
+        self.size = clamp(0.7, random.random() * 2, 1.3)
         self.load_images()
         self.dir = 0.0  # radian 값으로 방향을 표시
         self.speed = 0.0
@@ -209,7 +209,7 @@ class M2:
         self.build_behavior_tree()
 
         # hp
-        self.hp = 4
+        self.hp = 2
 
     def get_bb(self):
         return (
@@ -227,10 +227,10 @@ class M2:
     def draw(self):
         sx, sy = self.x - server.map.window_left, self.y - server.map.window_bottom
         if math.cos(self.dir) < 0:
+            M2.images[self.state][int(self.frame)].composite_draw(0, 'h', sx, sy, 100 * self.size, 100 * self.size)
+        else:
             M2.images[self.state][int(self.frame)].draw(sx, sy, 100 * self.size, 100 * self.size)
 
-        else:
-            M2.images[self.state][int(self.frame)].composite_draw(0, 'h', sx, sy, 100 * self.size, 100 * self.size)
         draw_rectangle(*self.get_bb())
 
     def handle_event(self, event):

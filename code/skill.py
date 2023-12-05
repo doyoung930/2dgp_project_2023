@@ -65,7 +65,7 @@ class Sword1:
             game_world.remove_object(self)
         if self.x > server.character.sx + 600 - 50:
             game_world.remove_object(self)
-        if self.y < 50 + server.character.sy -360 :
+        if self.y < 50 + server.character.sy - 360:
             game_world.remove_object(self)
         if self.y > server.character.sy + 360 - 50:
             game_world.remove_object(self)
@@ -74,6 +74,14 @@ class Sword1:
     def handle_collision(self, group, other):
         match group:
             case 'M1:sword1':
+                game_world.remove_object(self)
+            case 'M2:sword1':
+                game_world.remove_object(self)
+            case 'M3:sword1':
+                game_world.remove_object(self)
+            case 'M4:sword1':
+                game_world.remove_object(self)
+            case 'M5:sword1':
                 game_world.remove_object(self)
 
     def get_bb(self):
