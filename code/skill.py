@@ -1,6 +1,8 @@
 from pico2d import *
 import game_world
 import game_framework
+import monster
+
 import math
 
 # 검이 전방으로 날아감 ( 짧은 사거리 공격 속도 빠름)
@@ -32,6 +34,7 @@ class Sword1:
             self.image.composite_draw(89.5/2, ' ', self.x, self.y, self.image_w, self.image_h)
         elif self.dir == 6:#Runleftdown
             self.image.composite_draw(89.5*3/2, ' ', self.x, self.y, self.image_w, self.image_h)
+        draw_rectangle(*self.get_bb())
     def update(self):
         # 실드 움직임 플레이어를 중점으로 원을 그리며 돌아감
         # 방향에 따라
@@ -61,3 +64,12 @@ class Sword1:
             game_world.remove_object(self)
         if self.y < 25 - self.y or self.y > self.y + 720 - 25:
             game_world.remove_object(self)
+
+
+    def handle_collision(self, group, other):
+        match group:
+            case 'M1:sword1':
+                game_world.remove_object(self)
+
+    def get_bb(self):
+        return self.x - 10, self.y - 10, self.x + 10, self.y + 10

@@ -539,6 +539,7 @@ class PlayerCharacter:
                 self.shield_image.composite_draw(0, ' ', self.shield_x, self.shield_y, 40, 40)
 
     def Sword1(self):
+        global sword1
         sword1 = skill.Sword1(self.sx, self.sy, self.dir * 10, self.face_dir, self.dir2 * 10)
         game_world.add_object(sword1)
 
@@ -575,7 +576,6 @@ class PlayerCharacter:
             if self.sword2_pos[0][0] > self.sx + 4000:
                 for i in range(0, self.sword2_level):
                     self.sword2_pos[i] = (self.sx, self.sy)
-
 
     def Axe(self):
         if self.axe_level > 0:
@@ -640,8 +640,6 @@ class PlayerCharacter:
         #self.EXP_image.composite_draw(0, ' ', server.map.cw - 610, server.map.ch-710, 1220, 15)
         self.EXP_image.composite_draw(0, ' ', server.map.cw - 1220 + 610 * self.exp/1000 , server.map.ch-710, self.e_exp , 15)
 
-
-
     def Shoes(self):
         pass
 
@@ -660,6 +658,7 @@ class PlayerCharacter:
 
     def draw(self):
         self.state_machine.draw()
+        draw_rectangle(*self.get_bb())
         self.HP_image.composite_draw(0, ' ', self.sx-10, self.sy+30, self.hp/2, 5)
         self.Shield()
         self.Sword2()
@@ -668,13 +667,11 @@ class PlayerCharacter:
         self.EXP()
         
     def get_bb(self):
-        return self.x - 20, self.y - 50, self.x + 20, self.y + 50
+        return self.sx-25, self.sy-25, self.sx+15 , self.sy+25
 
     # fill here
     def handle_collision(self, group, other):
         match group:
-            case 'zombie:hit':
-                pass
-                #Ball.zombie_eat_sound.play()
-                #game_world.remove_object(self)
-        pass
+            case 'character:hit':
+                self.hp -= 1
+                print(self.hp)

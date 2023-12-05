@@ -56,6 +56,9 @@ class M1:
         self.tx, self.ty = 0, 0
         self.build_behavior_tree()
 
+        #hp
+        self.hp = 1
+
     def get_bb(self):
         return self.x - 50 * self.size, self.y - 50 * self.size, self.x + 50 * self.size, self.y + 50 * self.size
 
@@ -79,7 +82,12 @@ class M1:
         pass
 
     def handle_collision(self, group, other):
-        pass
+        match group:
+            case 'M1:sword1':
+                self.hp -= 1
+                print('충돌 했어')
+                if self.hp == 0:
+                    game_world.remove_object(self)
 
     def set_target_location(self):
         self.tx, self.ty = server.character.x, server.character.y
