@@ -2,7 +2,7 @@
 
 from pico2d import get_time, load_image, load_font, clamp, SDLK_UP, SDLK_DOWN, SDL_KEYDOWN, SDL_KEYUP, SDLK_SPACE, \
     SDLK_LEFT, SDLK_RIGHT, SDLK_i, \
-    draw_rectangle
+    draw_rectangle, load_wav
 import game_world
 import game_framework
 from map import DungeonMap
@@ -11,7 +11,8 @@ import skill
 import server
 import math
 import time
-
+import monster
+import game_over
 # state event check
 # ( state event type, event value )
 
@@ -420,6 +421,16 @@ class PlayerCharacter:
 
     def __init__(self):
 
+        self.at_sound = load_wav('attack.wav')
+        self.s2_sound = load_wav('sword2.wav')
+        self.axe_sound = load_wav('axe.wav')
+        self.at_sound.set_volume(30)
+        self.s2_sound.set_volume(30)
+        self.axe_sound.set_volume(30)
+        self.bgm = load_wav('bg.wav')
+        self.bgm.set_volume(32)
+        self.bgm.repeat_play()
+        self.time_since_last_monster = 0.0
         self.x, self.y = 1580, 2000
         self.sx = 1580
         self.sy = 2000
@@ -496,6 +507,7 @@ class PlayerCharacter:
 
     def Sword1(self):
         if self.sword1_level > 0:
+            self.at_sound.play()
             sword1 = skill.Sword1(self.sx, self.sy, self.dir * 10, self.face_dir, self.dir2 * 10)
             game_world.add_object(sword1)
             game_world.add_collision_pair('M1:sword1', None, sword1)
@@ -506,6 +518,8 @@ class PlayerCharacter:
 
     def Sword2(self):
         if self.sword2_level > 0:
+            self.s2_sound.play()
+
             sword2 = skill.Sword2(self.sx, self.sy, 3, self.sword2_level)
             game_world.add_object(sword2)
             game_world.add_collision_pair('M1:sword2', None, sword2)
@@ -516,6 +530,7 @@ class PlayerCharacter:
 
     def Axe(self):
         if self.axe_level > 0:
+            self.axe_sound.play()
             axe = skill.Axe(self.sx, self.sy, self.axe_level)
 
             game_world.add_object(axe)
@@ -557,20 +572,74 @@ class PlayerCharacter:
 
     def draw(self):
         self.state_machine.draw()
-        draw_rectangle(*self.get_bb())
+
         self.HP_image.composite_draw(0, ' ', self.sx-10, self.sy+30, self.hp/2, 5)
 
 
 
         # dt는 경과된 시간(delta time)을 나타냅니다.
         self.time_since_last_sword += 0.005
-        self.time_since_last_shield += 0.01
+        self.time_since_last_monster += 0.0001
 
         # Sword2 함수를 주기적으로 실행하기 위한 조건문
         if self.time_since_last_sword >= self.sword_cooldown:
             self.Sword2()
             self.Axe()
             self.time_since_last_sword = 0.0  # 경과 시간 초기화
+            print("소환")
+            for _ in range(20):
+                m1 = monster.M1()
+                game_world.add_object(m1)
+                game_world.add_collision_pair('M1:sword1', m1, None)
+                game_world.add_collision_pair('M1:sword2', m1, None)
+                game_world.add_collision_pair('M1:axe', m1, None)
+                game_world.add_collision_pair('M1:shield', m1, None)
+                game_world.add_collision_pair('character:M1', None, m1)
+            for _ in range(5):
+                m3 = monster.M3()
+                game_world.add_object(m3)
+                game_world.add_collision_pair('M3:sword1', m3, None)
+                game_world.add_collision_pair('M3:sword2', m3, None)
+                game_world.add_collision_pair('M3:axe', m3, None)
+                game_world.add_collision_pair('M3:shield', m3, None)
+                game_world.add_collision_pair('character:M3', None, m3)
+            for _ in range(3):
+                m4 = monster.M4()
+                game_world.add_object(m4)
+                game_world.add_collision_pair('M4:sword1', m4, None)
+                game_world.add_collision_pair('M4:sword2', m4, None)
+                game_world.add_collision_pair('M4:axe', m4, None)
+                game_world.add_collision_pair('M4:shield', m4, None)
+                game_world.add_collision_pair('character:M4', None, m4)
+            for _ in range(1):
+                m5 = monster.M5()
+                game_world.add_object(m5)
+                game_world.add_collision_pair('M5:sword1', m5, None)
+                game_world.add_collision_pair('M5:sword2', m5, None)
+                game_world.add_collision_pair('M5:axe', m5, None)
+                game_world.add_collision_pair('M5:shield', m5, None)
+                game_world.add_collision_pair('character:M5', None, m5)
+            if self.level == 8:
+                for _ in range(20):
+                    m4 = monster.M4()
+                    game_world.add_object(m4)
+                    game_world.add_object(m4)
+                    game_world.add_collision_pair('M4:sword1', m4, None)
+                    game_world.add_collision_pair('M4:sword2', m4, None)
+                    game_world.add_collision_pair('M4:axe', m4, None)
+                    game_world.add_collision_pair('M4:shield', m4, None)
+                    game_world.add_collision_pair('character:M4', None, m4)
+            if self.level == 12:
+                for _ in range(10):
+                    m5 = monster.M5()
+                    game_world.add_object(m5)
+                    game_world.add_collision_pair('M5:sword1', m5, None)
+                    game_world.add_collision_pair('M5:sword2', m5, None)
+                    game_world.add_collision_pair('M5:axe', m5, None)
+                    game_world.add_collision_pair('M5:shield', m5, None)
+                    game_world.add_collision_pair('character:M5', None, m5)
+
+        #if self.time_since_last_monster >=self.sword_cooldown:
 
         #self.Shield()
 
@@ -585,16 +654,14 @@ class PlayerCharacter:
         match group:
             case 'character:M1':
                 self.hp -= 1
-                print(self.hp)
+
             case 'character:M2':
                 self.hp -= 1
-                print(self.hp)
             case 'character:M3':
                 self.hp -= 1
-                print(self.hp)
             case 'character:M4':
                 self.hp -= 1
-                print(self.hp)
             case 'character:M5':
                 self.hp -= 1
-                print(self.hp)
+        if self.hp < -9999:
+            game_framework.change_mode(game_over)

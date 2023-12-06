@@ -80,7 +80,7 @@ class M1:
             M1.images[self.state][int(self.frame)].draw(sx, sy, 100 * self.size, 100 * self.size)
         else:
             M1.images[self.state][int(self.frame)].composite_draw(0, 'h', sx, sy, 100 * self.size, 100 * self.size)
-        draw_rectangle(*self.get_bb())
+
 
     def handle_event(self, event):
         pass
@@ -231,7 +231,7 @@ class M2:
         else:
             M2.images[self.state][int(self.frame)].draw(sx, sy, 100 * self.size, 100 * self.size)
 
-        draw_rectangle(*self.get_bb())
+
 
     def handle_event(self, event):
         pass
@@ -367,7 +367,7 @@ class M3:
         else:
             M3.images[self.state][int(self.frame)].draw(sx, sy, 100 * self.size, 100 * self.size)
 
-        draw_rectangle(*self.get_bb())
+
 
     def handle_event(self, event):
         pass
@@ -502,7 +502,7 @@ class M4:
         else:
             M4.images[self.state][int(self.frame)].draw(sx, sy, 100 * self.size, 100 * self.size)
 
-        draw_rectangle(*self.get_bb())
+
 
     def handle_event(self, event):
         pass
@@ -638,7 +638,7 @@ class M5:
         else:
             M5.images[self.state][int(self.frame)].draw(sx, sy, 100 * self.size, 100 * self.size)
 
-        draw_rectangle(*self.get_bb())
+
 
     def handle_event(self, event):
         pass

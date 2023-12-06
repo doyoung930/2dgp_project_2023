@@ -11,11 +11,10 @@ import skill
 from monster import *
 from skill import *
 import time
-#from ball import Ball
-#from zombie import Zombie
+# from ball import Ball
+# from zombie import Zombie
 
 import server
-
 
 
 def handle_events():
@@ -30,14 +29,13 @@ def handle_events():
         else:
             server.character.handle_event(event)
 
+
 def init():
     global m1, sword1
     running = True
 
     server.map = DungeonMap()
     game_world.add_object(server.map, 0)
-
-
 
     server.character = PlayerCharacter()
     game_world.add_object(server.character, 2)
@@ -47,57 +45,60 @@ def init():
     game_world.add_collision_pair('character:M4', server.character, None)
     game_world.add_collision_pair('character:M5', server.character, None)
 
+    # game_world.add_collision_pair('zombie:ball', zombie, None)
 
-    #game_world.add_collision_pair('zombie:ball', zombie, None)
-    for _ in range(10):
+
+
+
+    sword1 = skill.Sword1()
+    sword2 = server.character.Sword2()
+    shield = server.character.Shield()
+    axe = server.character.Axe()
+
+    for _ in range(60):
         m1 = M1()
-        m2 = M2()
-        m3 = M3()
-        m4 = M4()
-        m5 = M5()
-
-        sword1 = skill.Sword1()
-        sword2 = server.character.Sword2()
-        shield = server.character.Shield()
-        axe = server.character.Axe()
-
         game_world.add_object(m1)
+
+        game_world.add_collision_pair('M1:sword1', m1, None)
+        game_world.add_collision_pair('M1:sword2', m1, None)
+        game_world.add_collision_pair('M1:axe', m1, None)
+        game_world.add_collision_pair('M1:shield', m1, None)
+        game_world.add_collision_pair('character:M1', None, m1)
+
+
+    for _ in range(40):
+        m2 = M2()
         game_world.add_object(m2)
+
+        game_world.add_collision_pair('M2:sword1', m2, None)
+        game_world.add_collision_pair('M2:sword2', m2, None)
+        game_world.add_collision_pair('M2:axe', m2, None)
+        game_world.add_collision_pair('M2:shield', m2, None)
+        game_world.add_collision_pair('character:M2', None, m2)
+
+
+    for _ in range(10):
+        m3 = M3()
         game_world.add_object(m3)
-        game_world.add_object(m4)
-        game_world.add_object(m5)
 
-        game_world.add_collision_pair('character:M1',  None, m1)
-        game_world.add_collision_pair('character:M2',  None, m2)
-        game_world.add_collision_pair('character:M3',  None, m3)
-        game_world.add_collision_pair('character:M4',  None, m4)
-        game_world.add_collision_pair('character:M5',  None, m5)
+        game_world.add_collision_pair('M3:sword1', m3, None)
+        game_world.add_collision_pair('M3:sword2', m3, None)
+        game_world.add_collision_pair('M3:axe', m3, None)
+        game_world.add_collision_pair('M3:shield', m3, None)
+        game_world.add_collision_pair('character:M3', None, m3)
+    m4 = M4()
+    game_world.add_collision_pair('M4:sword1', m4, None)
+    game_world.add_collision_pair('M4:sword2', m4, None)
+    game_world.add_collision_pair('M4:axe', m4, None)
+    game_world.add_collision_pair('M4:shield', m4, None)
+    game_world.add_collision_pair('character:M4', None, m4)
+    m5 = M5()
 
-        game_world.add_collision_pair('M1:sword1',  m1, None)
-        game_world.add_collision_pair('M1:sword2',  m1, None)
-        game_world.add_collision_pair('M1:axe',     m1, None)
-        game_world.add_collision_pair('M1:shield',  m1, None)
-
-        game_world.add_collision_pair('M2:sword1',  m2, None)
-        game_world.add_collision_pair('M2:sword2',  m2, None)
-        game_world.add_collision_pair('M2:axe',     m2, None)
-        game_world.add_collision_pair('M2:shield',  m2, None)
-
-        game_world.add_collision_pair('M3:sword1',  m3, None)
-        game_world.add_collision_pair('M3:sword2',  m3, None)
-        game_world.add_collision_pair('M3:axe',     m3, None)
-        game_world.add_collision_pair('M3:shield',  m3, None)
-
-        game_world.add_collision_pair('M4:sword1',  m4, None)
-        game_world.add_collision_pair('M4:sword2',  m4, None)
-        game_world.add_collision_pair('M4:axe',     m4, None)
-        game_world.add_collision_pair('M4:shield',  m4, None)
-
-        game_world.add_collision_pair('M5:sword1',  m5, None)
-        game_world.add_collision_pair('M5:sword2',  m5, None)
-        game_world.add_collision_pair('M5:axe',     m5, None)
-        game_world.add_collision_pair('M5:shield',  m5, None)
-
+    game_world.add_collision_pair('M5:sword1', m5, None)
+    game_world.add_collision_pair('M5:sword2', m5, None)
+    game_world.add_collision_pair('M5:axe', m5, None)
+    game_world.add_collision_pair('M5:shield', m5, None)
+    game_world.add_collision_pair('character:M5', None, m5)
     sword1 = Sword1()
     game_world.add_collision_pair('M1:sword1', None, sword1)
     game_world.add_collision_pair('M2:sword1', None, sword1)
@@ -126,8 +127,8 @@ def init():
     game_world.add_collision_pair('M4:axe', None, axe)
     game_world.add_collision_pair('M5:axe', None, axe)
 
-
     # game_world.add_collision_pair('M1:sword1', None, server.character.Sword1())
+
 
 def finish():
     game_world.clear()
@@ -143,15 +144,15 @@ def update():
         server.character.c_level = server.character.level
 
 
-
 def draw():
     clear_canvas()
     game_world.render()
     update_canvas()
 
+
 def pause():
     pass
 
+
 def resume():
     pass
-

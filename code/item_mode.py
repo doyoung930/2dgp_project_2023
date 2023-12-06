@@ -39,12 +39,14 @@ def handle_events():
                     server.character.hp = 100
                 case pico2d.SDLK_2:
                     server.character.s_time = 0
+                    #game_framework.pop_mode()
                     game_framework.pop_mode()
                     if server.character.sword1_level< 8:
                         server.character.sword2_level += 1
                     server.character.hp = 100
                 case pico2d.SDLK_3:
                     server.character.s_time = 0
+                    #game_framework.pop_mode()
                     game_framework.pop_mode()
                     if server.character.axe_level < 4:
                         server.character.axe_level += 1

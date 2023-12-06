@@ -36,7 +36,7 @@ class Sword1:
             self.image.composite_draw(89.5/2, ' ', self.x, self.y, self.image_w, self.image_h)
         elif self.dir == 6:#Runleftdown
             self.image.composite_draw(89.5*3/2, ' ', self.x, self.y, self.image_w, self.image_h)
-        draw_rectangle(*self.get_bb())
+
     def update(self):
         # 실드 움직임 플레이어를 중점으로 원을 그리며 돌아감
         # 방향에 따라
@@ -155,7 +155,7 @@ class Sword2:
             elif i == 7:# Runleftdown
                 self.image.composite_draw(self.sword2_angle[i], ' ', self.sword2_pos[i][0], self.sword2_pos[i][1], self.image_w, self.image_h)
             self.sx, self.sy = self.sword2_pos[i][0], self.sword2_pos[i][1]
-            draw_rectangle(*self.get_bb())
+
 
 
     def update(self):
@@ -206,6 +206,8 @@ class Sword2:
                     self.sword2_pos[i][0] - self.sword2_speed * 300 * game_framework.frame_time,
                     self.sword2_pos[i][1] - self.sword2_speed * 300 * game_framework.frame_time)
                 self.sword2_angle[i] -= 0.5
+
+            self.sx, self.sy = self.sword2_pos[i][0], self.sword2_pos[i][1]
 
             if self.life_time > 1:
                 if self.sword2_pos[i][0] < 50 + server.character.sx - 1000:
@@ -322,10 +324,9 @@ class Axe:
                                               self.axe_pos[i][1], self.image_w, self.image_h)
 
             self.sx, self.sy = self.axe_pos[i][0], self.axe_pos[i][1]
-            draw_rectangle(*self.get_bb())
+
 
     def update(self):
-        print("axe up")
         # 실드 움직임 플레이어를 중점으로 원을 그리며 돌아감
         # 방향에 따라
 
@@ -471,7 +472,7 @@ class Shield:
         for i in range(0, 4):
             self.shield_image.composite_draw(0, ' ', self.shield_pos[i][0], self.shield_pos[i][1], 40, 40)
             self.sx, self.sy = self.shield_pos[i][0], self.shield_pos[i][1]
-            draw_rectangle(*self.get_bb())
+
 
     def update(self):
         for i in range(0, self.shield_level):

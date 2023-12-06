@@ -59,7 +59,7 @@ class M1:
         self.build_behavior_tree()
 
         # hp
-        self.hp = 1
+        self.hp = 2
 
     def get_bb(self):
         return (
@@ -80,7 +80,7 @@ class M1:
             M1.images[self.state][int(self.frame)].draw(sx, sy, 100 * self.size, 100 * self.size)
         else:
             M1.images[self.state][int(self.frame)].composite_draw(0, 'h', sx, sy, 100 * self.size, 100 * self.size)
-        draw_rectangle(*self.get_bb())
+
 
     def handle_event(self, event):
         pass
@@ -91,7 +91,7 @@ class M1:
                 self.hp -= server.character.sword1_level
                 if self.hp <= 0:
                     game_world.remove_object(self)
-                    server.character.exp += 100 / server.character.next_level
+                    server.character.exp += 500 / server.character.next_level
                     if server.character.exp >= 1000:
                         server.character.exp -= 1000
                         server.character.level += 1
@@ -101,7 +101,7 @@ class M1:
                 self.hp -= 1
                 if self.hp <= 0:
                     game_world.remove_object(self)
-                    server.character.exp += 100 / server.character.next_level
+                    server.character.exp += 500 / server.character.next_level
                     if server.character.exp >= 1000:
                         server.character.exp -= 1000
                         server.character.level += 1
@@ -111,7 +111,7 @@ class M1:
                 self.hp -= 1
                 if self.hp <= 0:
                     game_world.remove_object(self)
-                    server.character.exp += 100 / server.character.next_level
+                    server.character.exp += 500 / server.character.next_level
                     if server.character.exp >= 1000:
                         server.character.exp -= 1000
                         server.character.level += 1
@@ -121,7 +121,7 @@ class M1:
                 self.hp -= 1
                 if self.hp <= 0:
                     game_world.remove_object(self)
-                    server.character.exp += 100 / server.character.next_level
+                    server.character.exp += 500 / server.character.next_level
                     if server.character.exp >= 1000:
                         server.character.exp -= 1000
                         server.character.level += 1
@@ -231,7 +231,7 @@ class M2:
 
         else:
             M2.images[self.state][int(self.frame)].composite_draw(0, 'h', sx, sy, 100 * self.size, 100 * self.size)
-        draw_rectangle(*self.get_bb())
+
 
     def handle_event(self, event):
         pass
@@ -242,7 +242,7 @@ class M2:
                 self.hp -= server.character.sword1_level
                 if self.hp <= 0:
                     game_world.remove_object(self)
-                    server.character.exp += 100 / server.character.next_level
+                    server.character.exp += 500 / server.character.next_level
                     if server.character.exp >= 1000:
                         server.character.exp -= 1000
                         server.character.level += 1
@@ -252,7 +252,7 @@ class M2:
                 self.hp -= 1
                 if self.hp <= 0:
                     game_world.remove_object(self)
-                    server.character.exp += 100 / server.character.next_level
+                    server.character.exp += 500 / server.character.next_level
                     if server.character.exp >= 1000:
                         server.character.exp -= 1000
                         server.character.level += 1
@@ -262,7 +262,7 @@ class M2:
                 self.hp -= 1
                 if self.hp <= 0:
                     game_world.remove_object(self)
-                    server.character.exp += 100 / server.character.next_level
+                    server.character.exp += 500 / server.character.next_level
                     if server.character.exp >= 1000:
                         server.character.exp -= 1000
                         server.character.level += 1
@@ -272,7 +272,7 @@ class M2:
                 self.hp -= 1
                 if self.hp <= 0:
                     game_world.remove_object(self)
-                    server.character.exp += 100 / server.character.next_level
+                    server.character.exp += 500/ server.character.next_level
                     if server.character.exp >= 1000:
                         server.character.exp -= 1000
                         server.character.level += 1
@@ -345,7 +345,7 @@ class M3:
         self.build_behavior_tree()
 
         # hp
-        self.hp = 3
+        self.hp = 8
 
     def get_bb(self):
         return (
@@ -367,7 +367,7 @@ class M3:
         else:
             M3.images[self.state][int(self.frame)].composite_draw(0, 'h', sx, sy, 100 * self.size, 100 * self.size)
 
-        draw_rectangle(*self.get_bb())
+
 
     def handle_event(self, event):
         pass
@@ -378,7 +378,7 @@ class M3:
                 self.hp -= server.character.sword1_level
                 if self.hp <= 0:
                     game_world.remove_object(self)
-                    server.character.exp += 100 / server.character.next_level
+                    server.character.exp += 500 / server.character.next_level
                     if server.character.exp >= 1000:
                         server.character.exp -= 1000
                         server.character.level += 1
@@ -388,7 +388,7 @@ class M3:
                 self.hp -= 1
                 if self.hp <= 0:
                     game_world.remove_object(self)
-                    server.character.exp += 100 / server.character.next_level
+                    server.character.exp += 500 / server.character.next_level
                     if server.character.exp >= 1000:
                         server.character.exp -= 1000
                         server.character.level += 1
@@ -398,7 +398,7 @@ class M3:
                 self.hp -= 1
                 if self.hp <= 0:
                     game_world.remove_object(self)
-                    server.character.exp += 100 / server.character.next_level
+                    server.character.exp += 500  / server.character.next_level
                     if server.character.exp >= 1000:
                         server.character.exp -= 1000
                         server.character.level += 1
@@ -408,7 +408,7 @@ class M3:
                 self.hp -= 1
                 if self.hp <= 0:
                     game_world.remove_object(self)
-                    server.character.exp += 100 / server.character.next_level
+                    server.character.exp += 500 / server.character.next_level
                     if server.character.exp >= 1000:
                         server.character.exp -= 1000
                         server.character.level += 1
@@ -481,7 +481,7 @@ class M4:
         self.build_behavior_tree()
 
         # hp
-        self.hp = 4
+        self.hp = 10
 
     def get_bb(self):
         return (
@@ -502,7 +502,7 @@ class M4:
         else:
             M4.images[self.state][int(self.frame)].composite_draw(0, 'h', sx, sy, 100 * self.size, 100 * self.size)
 
-        draw_rectangle(*self.get_bb())
+
 
     def handle_event(self, event):
         pass
@@ -513,7 +513,7 @@ class M4:
                 self.hp -= server.character.sword1_level
                 if self.hp <= 0:
                     game_world.remove_object(self)
-                    server.character.exp += 100 / server.character.next_level
+                    server.character.exp += 500 / server.character.next_level
                     if server.character.exp >= 1000:
                         server.character.exp -= 1000
                         server.character.level += 1
@@ -523,7 +523,7 @@ class M4:
                 self.hp -= 1
                 if self.hp <= 0:
                     game_world.remove_object(self)
-                    server.character.exp += 100 / server.character.next_level
+                    server.character.exp += 500 / server.character.next_level
                     if server.character.exp >= 1000:
                         server.character.exp -= 1000
                         server.character.level += 1
@@ -533,7 +533,7 @@ class M4:
                 self.hp -= 1
                 if self.hp <= 0:
                     game_world.remove_object(self)
-                    server.character.exp += 100 / server.character.next_level
+                    server.character.exp += 1000 / server.character.next_level
                     if server.character.exp >= 1000:
                         server.character.exp -= 1000
                         server.character.level += 1
@@ -543,7 +543,7 @@ class M4:
                 self.hp -= 1
                 if self.hp <= 0:
                     game_world.remove_object(self)
-                    server.character.exp += 100 / server.character.next_level
+                    server.character.exp += 500 / server.character.next_level
                     if server.character.exp >= 1000:
                         server.character.exp -= 1000
                         server.character.level += 1
@@ -616,7 +616,7 @@ class M5:
         self.build_behavior_tree()
 
         # hp
-        self.hp = 5
+        self.hp = 15
 
     def get_bb(self):
         return (
@@ -638,7 +638,7 @@ class M5:
         else:
             M5.images[self.state][int(self.frame)].composite_draw(0, 'h', sx, sy, 100 * self.size, 100 * self.size)
 
-        draw_rectangle(*self.get_bb())
+
 
     def handle_event(self, event):
         pass
@@ -649,7 +649,7 @@ class M5:
                 self.hp -= server.character.sword1_level
                 if self.hp <= 0:
                     game_world.remove_object(self)
-                    server.character.exp += 100 / server.character.next_level
+                    server.character.exp += 500 / server.character.next_level
                     if server.character.exp >= 1000:
                         server.character.exp -= 1000
                         server.character.level += 1
@@ -659,7 +659,7 @@ class M5:
                 self.hp -= 1
                 if self.hp <= 0:
                     game_world.remove_object(self)
-                    server.character.exp += 100 / server.character.next_level
+                    server.character.exp += 500/ server.character.next_level
                     if server.character.exp >= 1000:
                         server.character.exp -= 1000
                         server.character.level += 1
@@ -669,7 +669,7 @@ class M5:
                 self.hp -= 1
                 if self.hp <= 0:
                     game_world.remove_object(self)
-                    server.character.exp += 100 / server.character.next_level
+                    server.character.exp += 1000 / server.character.next_level
                     if server.character.exp >= 1000:
                         server.character.exp -= 1000
                         server.character.level += 1
@@ -679,7 +679,7 @@ class M5:
                 self.hp -= 1
                 if self.hp <= 0:
                     game_world.remove_object(self)
-                    server.character.exp += 100 / server.character.next_level
+                    server.character.exp += 500 / server.character.next_level
                     if server.character.exp >= 1000:
                         server.character.exp -= 1000
                         server.character.level += 1

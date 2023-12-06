@@ -12,6 +12,7 @@ class DungeonMap:
         self.w = self.image.w
         self.h = self.image.h
 
+
     def update(self):
         self.window_left = clamp(0, int(server.character.x) - self.cw // 2, self.w - self.cw - 1)
         self.window_bottom = clamp(0, int(server.character.y) - self.ch // 2, self.h - self.ch - 1)
