@@ -2,9 +2,9 @@ import game_framework
 import game_world
 from pico2d import load_image, delay, clear_canvas, update_canvas, get_events, get_time
 import pico2d
-
+import play_mode
 from item_select import Item_Select
-
+import server
 def init():
     global item_select
     item_select = Item_Select()
@@ -34,10 +34,19 @@ def handle_events():
                 case pico2d.SDLK_ESCAPE:
                     game_framework.pop_mode()
                 case pico2d.SDLK_1:
+                    server.character.s_time = 0
                     game_framework.pop_mode()
+                    server.character.sword1_level += 1
                 case pico2d.SDLK_2:
+                    server.character.s_time = 0
                     game_framework.pop_mode()
-
+                    if server.character.sword1_level< 8:
+                        server.character.sword2_level += 1
+                case pico2d.SDLK_3:
+                    server.character.s_time = 0
+                    game_framework.pop_mode()
+                    if server.character.axe_level < 4:
+                        server.character.axe_level += 1
 def pause():
     pass
 

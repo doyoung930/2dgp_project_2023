@@ -10,11 +10,13 @@ from character import PlayerCharacter
 import skill
 from monster import *
 from skill import *
-
+import time
 #from ball import Ball
 #from zombie import Zombie
 
 import server
+
+s_time = 99999999
 
 def handle_events():
     events = get_events()
@@ -135,6 +137,11 @@ def finish():
 def update():
     game_world.update()
     game_world.handle_collisions()
+
+    if server.character.level == server.character.c_level + 1:
+        game_framework.push_mode(item_mode)
+        server.character.c_level = server.character.level
+
 
 def draw():
     clear_canvas()

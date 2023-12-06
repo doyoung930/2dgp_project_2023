@@ -10,7 +10,7 @@ from map import DungeonMap
 import skill
 import server
 import math
-
+import time
 
 # state event check
 # ( state event type, event value )
@@ -435,6 +435,7 @@ class PlayerCharacter:
         self.player_width = 50  # 플레이어 크기 width
         self.player_height = 50  # 플레이어 크기 height
 
+        self.c_level = 0
         self.level = 0
         self.next_level = 1
 
@@ -457,7 +458,8 @@ class PlayerCharacter:
 
         # sword2
         self.sword2_image = load_image("./png/weapon/Sword-2-05.png")
-        self.sword2_level = 0
+        self.sword2_level = 0 #<8
+
         # sword2 timer
         self.sword_cooldown = 3.0  # Sword2 함수의 실행 주기를 나타내는 변수
         self.shield_cooldown = 3.0  # Sword2 함수의 실행 주기를 나타내는 변수
@@ -465,7 +467,7 @@ class PlayerCharacter:
         self.time_since_last_shield = 0.0  # 마지막 Sword2 함수 실행 이후의 경과 시간을 저장하는 변수
 
         # axe
-        self.axe_level = 4
+        self.axe_level = 0 #<4
 
 
         #base
@@ -482,6 +484,7 @@ class PlayerCharacter:
         self.exp = 0  # 플레이어 경험치
         self.max_exp = 1000
 
+        self.s_time = 0
     def character_exp(self):
         pass
 
@@ -539,12 +542,15 @@ class PlayerCharacter:
         pass
 
     def update(self):
+        time.sleep(self.s_time)
         #print(self.sx, self.sy)
         self.state_machine.update()
         self.x = clamp(50.0, self.x, server.map.w - 50.0)
         self.y = clamp(50.0, self.y, server.map.h - 50.0)
         self.sx = self.x - server.map.window_left
         self.sy = self.y - server.map.window_bottom
+
+
 
     def handle_event(self, event):
         self.state_machine.handle_event(('INPUT', event))
@@ -577,6 +583,18 @@ class PlayerCharacter:
     # fill here
     def handle_collision(self, group, other):
         match group:
-            case 'character:hit':
+            case 'character:M1':
+                self.hp -= 1
+                print(self.hp)
+            case 'character:M2':
+                self.hp -= 1
+                print(self.hp)
+            case 'character:M3':
+                self.hp -= 1
+                print(self.hp)
+            case 'character:M4':
+                self.hp -= 1
+                print(self.hp)
+            case 'character:M5':
                 self.hp -= 1
                 print(self.hp)

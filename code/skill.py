@@ -250,7 +250,7 @@ class Axe:
             self,
             sx=100000,
             sy=100000,
-            level=4):
+            level=0):
         if self.axe_image == None:
             self.axe_image = load_image("./png/weapon/axe-03.png")
 
@@ -293,7 +293,7 @@ class Axe:
             0.01
         ]
         self.axe_level = level
-        self.axe_level = 4
+
 
         self.image_w = 60
         self.image_h = 60
@@ -383,23 +383,23 @@ class Axe:
 
     def handle_collision(self, group, other):
         match group:
-            case 'M1:sword2':
+            case 'M1:axe':
                 self.life_time -= 1
                 if self.life_time <= 0:
                     game_world.remove_object(self)
-            case 'M2:sword2':
+            case 'M2:axe':
                 self.life_time -= 1
                 if self.life_time <= 0:
                     game_world.remove_object(self)
-            case 'M3:sword2':
+            case 'M3:axe':
                 self.life_time -= 1
                 if self.life_time <= 0:
                     game_world.remove_object(self)
-            case 'M4:sword2':
+            case 'M4:axe':
                 self.life_time -= 1
                 if self.life_time <= 0:
                     game_world.remove_object(self)
-            case 'M5:sword2':
+            case 'M5:axe':
                 self.life_time -= 1
                 if self.life_time <= 0:
                     game_world.remove_object(self)
