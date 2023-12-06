@@ -16,7 +16,7 @@ import time
 
 import server
 
-s_time = 99999999
+
 
 def handle_events():
     events = get_events()
@@ -141,6 +141,7 @@ def update():
     if server.character.level == server.character.c_level + 1:
         game_framework.push_mode(item_mode)
         server.character.c_level = server.character.level
+
 
 
 def draw():
