@@ -363,9 +363,9 @@ class M3:
     def draw(self):
         sx, sy = self.x - server.map.window_left, self.y - server.map.window_bottom
         if math.cos(self.dir) < 0:
-            M3.images[self.state][int(self.frame)].composite_draw(0, 'h', sx, sy, 100 * self.size, 100 * self.size)
-        else:
             M3.images[self.state][int(self.frame)].draw(sx, sy, 100 * self.size, 100 * self.size)
+        else:
+            M3.images[self.state][int(self.frame)].composite_draw(0, 'h', sx, sy, 100 * self.size, 100 * self.size)
 
         draw_rectangle(*self.get_bb())
 
@@ -498,9 +498,9 @@ class M4:
     def draw(self):
         sx, sy = self.x - server.map.window_left, self.y - server.map.window_bottom
         if math.cos(self.dir) < 0:
-            M4.images[self.state][int(self.frame)].composite_draw(0, 'h', sx, sy, 100 * self.size, 100 * self.size)
-        else:
             M4.images[self.state][int(self.frame)].draw(sx, sy, 100 * self.size, 100 * self.size)
+        else:
+            M4.images[self.state][int(self.frame)].composite_draw(0, 'h', sx, sy, 100 * self.size, 100 * self.size)
 
         draw_rectangle(*self.get_bb())
 
@@ -634,9 +634,9 @@ class M5:
     def draw(self):
         sx, sy = self.x - server.map.window_left, self.y - server.map.window_bottom
         if math.cos(self.dir) < 0:
-            M5.images[self.state][int(self.frame)].composite_draw(0, 'h', sx, sy, 100 * self.size, 100 * self.size)
-        else:
             M5.images[self.state][int(self.frame)].draw(sx, sy, 100 * self.size, 100 * self.size)
+        else:
+            M5.images[self.state][int(self.frame)].composite_draw(0, 'h', sx, sy, 100 * self.size, 100 * self.size)
 
         draw_rectangle(*self.get_bb())
 
