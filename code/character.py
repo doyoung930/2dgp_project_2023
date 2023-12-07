@@ -1,7 +1,7 @@
 # 이것은 각 상태들을 객체로 구현한 것임.
 
 from pico2d import get_time, load_image, load_font, clamp, SDLK_UP, SDLK_DOWN, SDL_KEYDOWN, SDL_KEYUP, SDLK_SPACE, \
-    SDLK_LEFT, SDLK_RIGHT, SDLK_i, \
+    SDLK_LEFT, SDLK_RIGHT, SDLK_i, SDLK_e, \
     draw_rectangle, load_wav
 import game_world
 import game_framework
@@ -13,6 +13,7 @@ import math
 import time
 import monster
 import game_over
+import clear
 # state event check
 # ( state event type, event value )
 
@@ -53,7 +54,8 @@ def space_down(e):
 
 def item_mode(e):
     return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_i
-
+def item_mode(e):
+    return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_e
 def time_out(e):
     return e[0] == 'TIME_OUT'
 
@@ -580,13 +582,14 @@ class PlayerCharacter:
         # dt는 경과된 시간(delta time)을 나타냅니다.
         self.time_since_last_sword += 0.005
         self.time_since_last_monster += 0.0001
+        if self.time_since_last_monster >= 100.0:
+            game_framework.change_mode(clear)
 
         # Sword2 함수를 주기적으로 실행하기 위한 조건문
         if self.time_since_last_sword >= self.sword_cooldown:
             self.Sword2()
             self.Axe()
             self.time_since_last_sword = 0.0  # 경과 시간 초기화
-            print("소환")
             for _ in range(20):
                 m1 = monster.M1()
                 game_world.add_object(m1)

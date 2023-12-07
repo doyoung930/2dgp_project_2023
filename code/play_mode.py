@@ -26,6 +26,8 @@ def handle_events():
             game_framework.quit()
         elif event.type == SDL_KEYDOWN and event.key == SDLK_i:
             game_framework.push_mode(item_mode)
+        elif event.type == SDL_KEYDOWN and event.key == SDLK_e:
+            server.character.hp = 99999
         else:
             server.character.handle_event(event)
 
